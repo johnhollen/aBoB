@@ -2,7 +2,7 @@
 
 
 img = imread('testimages/Images_Training_2/Hus_1a.png');
+img1 = imread('testimages/Images_Training_1/Bygg_1.png');
 
-size(img(:,:,3));
 
 imshow(img);
