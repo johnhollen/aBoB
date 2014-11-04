@@ -8,16 +8,19 @@ function strout = tnm034(im)
 %Normalize the image
 imageDim = size(im, 3);
 disp(sprintf('Dimension of image is %d', imageDim))
+
 im = im2double(im);
 %Print im
 
-%Create greyscale image if the image is in color
+%Create greyscale image
 if imageDim == 3
-   im = (im(:,:,1)+im(:,:,2)+im(:,:,3))/3;
-   imshow(im);
+   %The image is a color image
+   
+else
+   %The image is a grey scale image
 end
 
-%First step: Find the corner points, call the corresponding function
+%First step: Find the corner points
 qrImage = findQR(im);
 
 
