@@ -3,4 +3,5 @@ function [qrImage] = findQR(image)
 
 
 
+
 qrImage = zeros(200);
