@@ -13,7 +13,7 @@ if imageDim == 3
 end
 binary = binarize(greyScale);
 
-imshow(binary);
+%imshow(binary);
 
 %Find the finder pattern
 %Look for ratio 1:1:3:1:1
@@ -23,8 +23,8 @@ height = size(binary, 2);
 segments = [];
 segmentSize = 0;
 segment = 0;
-figure
-imshow(image);
+%figure
+%imshow(image);
 
 for j = 1:height
     for i = 1:width-1
@@ -35,16 +35,23 @@ for j = 1:height
             segments(segment, 1) = segmentSize;
             segments(segment, 2) = i;
             segments(segment, 3) = j;
-            if binary(i, j) == 0
-                segments(segment, 4) = 0;
-            elseif binary(i, j) == 1
-                segments(segment, 4) = 1;
-            end
+            segments(segment, 4) = binary(i,j);
+            
+            %if binary(i, j) == 0
+             %   segments(segment, 4) = 0;
+            %elseif binary(i, j) == 1
+             %   segments(segment, 4) = 1;
+            %end
             segmentSize = 0;
         end
     end    
 end
 percentage = 0.35;
+
+
+% Save last dot in the finding pattern
+findpattern = zeros(width,height);
+counter = 0;
 %Check the dark areas
 for i = 1:length(segments)-2
     if segments(i, 4) == 0 && i > 2
@@ -59,13 +66,28 @@ for i = 1:length(segments)-2
         %Check middle to adjacent
         if abs(middleBlack-3*leftWhite) <= percentage*middleBlack && abs(middleBlack-3*rightWhite) <= percentage*middleBlack
            %Check edges
+           counter = counter+1;
            if abs(leftWhite-leftBlack) < percentage*leftWhite && abs(rightWhite-rightBlack) < percentage*rightWhite
               fprintf('\n \n Possible found \n \n'); 
               greyScale(segments(i-2, 2):segments(i+2, 2), segments(i-2, 3):segments(i+2, 3)) = 1;
+              %findpattern(counter,1)= segments(i-2,2);  % Start x-led
+              %findpattern(counter,2)= segments(i+2,2);  % Stop x-led
+              %findpattern(counter,3)= segments(i-2,3);  % Start y-led
+              %findpattern(counter,4)= segments(i+2,3);  % Stop y-led
+              
+              findpattern(segments(i-2, 2):segments(i+2, 2), segments(i-2, 3):segments(i+2, 3)) = 1;
+              
            end
         end
     end
 end
+
+
+L = bwlabel(findpattern, 4);
+
+L = L/max(max(L));
+
+counter
 figure
-imshow(greyScale);
+imshow(L);
 qrImage = zeros(200);
