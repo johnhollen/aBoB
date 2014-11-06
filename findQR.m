@@ -2,6 +2,7 @@ function [qrImage] = findQR(image)
 %Function for finding and extracting the QR-code
 
 
+qrImage = image;
 
 
-qrImage = zeros(200);
+
