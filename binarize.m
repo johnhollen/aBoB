@@ -49,9 +49,9 @@ for i = 1:width
    end
 end
 
-imshow(binaryImage);
-figure 
-imshow(image);
+%imshow(binaryImage);
+%figure 
+%imshow(image);
 
 binary = binaryImage;
 
