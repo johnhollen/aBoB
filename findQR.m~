@@ -5,6 +5,9 @@ function [qrImage] = findQR(image)
 imageDim = size(image, 3);
 disp(sprintf('Dimension of image is %d', imageDim))
 
+qrImage = image;
+
+=======
 greyScale = im2double(image);
 
 %Create greyscale image if the image is in color
@@ -13,6 +16,8 @@ if imageDim == 3
 end
 binary = binarize(greyScale);
 
+<<<<<<< HEAD
+=======
 imshow(binary);
 
 %Find the finder pattern
@@ -69,3 +74,4 @@ end
 figure
 imshow(greyScale);
 qrImage = zeros(200);
+>>>>>>> 9f33cb11a1debc15fe2eb266205a06d471075521
