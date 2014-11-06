@@ -79,7 +79,7 @@ for i = 1:length(segmentsY)-2
         downWhite = segmentsY(i+1, 1);
         upBlack = segmentsY(i-2, 1);
         downBlack = segmentsY(i+2, 1);
-        
+       
         %Check middle to adjacent
         if abs(middleBlack-3*upWhite) <= percentage*middleBlack && abs(middleBlack-3*downWhite) <= percentage*middleBlack
            %Check edges
@@ -134,30 +134,35 @@ for i = 1:nrLabels
        counter = counter+1;
        if(counter > 3)
           break; 
-       end
-       image(meanY-10:meanY+10, meanX-10:meanX+10) = 1;
-        
+       end        
        centrePoints(counter, 1) = meanY;
        centrePoints(counter, 2) = meanX;
    end
 end
 
-vec1 = [centrePoints(2, 1), centrePoints(2, 2)]-[centrePoints(1, 1), centrePoints(1, 2)];
-vec2 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(1, 1), centrePoints(1, 2)];
-vec3 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(2, 1), centrePoints(2, 2)];
-vec1 = vec1/norm(vec1)
-vec2 = vec2/norm(vec2)
-vec3 = vec3/norm(vec3)
-figure
-plot(vec1);
+%vec1 = [centrePoints(2, 1), centrePoints(2, 2)]-[centrePoints(1, 1), centrePoints(1, 2)]
+%vec2 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(1, 1), centrePoints(1, 2)]
+%vec3 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(2, 1), centrePoints(2, 2)]
+%vec1 = vec1/norm(vec1);
+%vec2 = vec2/norm(vec2);
+%vec3 = vec3/norm(vec3);
+imshow(image)
 hold on
-plot(vec2);
-plot(vec3);
+plot([centrePoints(1,2),centrePoints(2, 2)], [centrePoints(1,1),centrePoints(2, 1)],'color', 'r', 'linewidth', 3)
 
-a = acos(dot(vec2, vec1))
-b = acos(dot(vec2, vec3))
-c = acos(dot(vec1, vec3))
-%imshow(image);
+plot([centrePoints(3,2),centrePoints(2, 2)], [centrePoints(3,1),centrePoints(2, 1)],'color', 'r', 'linewidth', 3)
+
+plot([centrePoints(1,2),centrePoints(3, 2)], [centrePoints(1,1),centrePoints(3, 1)],'color', 'r', 'linewidth', 3)
+%plot(vec3, 'b')
+%angles
+%a = acos(dot(vec2, vec1));
+%b = acos(dot(vec2, vec3));
+%c = acos(dot(vec1, vec3));
+
+
+%Extract the QR-code
+
+
 
 
 qrImage = zeros(200);
