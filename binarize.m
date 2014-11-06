@@ -2,39 +2,39 @@ function [binary] = binarize(image)
 %BINARIZE used adaptive binarization to create binary image
 
 %Extract width and height from the image
-width = size(image, 1);
-height = size(image, 2);
+width = size(image, 2);
+height = size(image, 1);
 
 %Create binary image with adaptive tresholding
 %Extension of Wellner's method
-binaryImage = zeros(width, height);
+binaryImage = zeros(height, width);
 %Calculate integral image, matlab built in method
 integImage = integralImage(image);
 
 %s is the block size
 %t is a percentage
-s = round(width/8, 0);
+s = round(height/8, 0);
 fprintf('s: %d \n', s);
 t = 15;
-
+sdiv = round(s/2, 0);
 %Treshold
-for i = 1:width
-   for j = 1:height
-       x1 = i - s/2;
+for i = 1:height
+   for j = 1:width
+       x1 = i - sdiv;
        if x1 <= 1
            x1 = 2;
        end
-       x2 = i + s/2;
-       if x2 > width+1
-          x2 = width+1;
+       x2 = i + sdiv;
+       if x2 > height+1
+          x2 = height+1;
        end
-       y1 = j - s/2;
+       y1 = j - sdiv;
        if y1 <= 1
            y1 = 2;
        end
-       y2 = j + s/2;
-       if y2 > height+1
-          y2 = height+1;
+       y2 = j + sdiv;
+       if y2 > width+1
+          y2 = width+1;
        end
 
        count = (x2 - x1)*(y2 - y1);

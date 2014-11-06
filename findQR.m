@@ -1,6 +1,6 @@
 function [qrImage] = findQR(image)
 %Function for finding and extracting the QR-code
-
+image = im2double(image);
 %Check dimension and normalize image
 imageDim = size(image, 3);
 disp(sprintf('Dimension of image is %d', imageDim))
@@ -12,8 +12,6 @@ if imageDim == 3
    greyScale = (greyScale(:,:,1)+greyScale(:,:,2)+greyScale(:,:,3))/3;
 end
 binary = binarize(greyScale);
-
-%imshow(binary);
 
 %Find the finder pattern
 %Look for ratio 1:1:3:1:1
@@ -49,7 +47,7 @@ for j = 1:width-1
 end
 
 % Save last dot in the finding pattern
-findpattern = zeros(width,height);
+findpattern = zeros(height,width);
 counter = 0;
 
 for i = 1:height-1
@@ -69,7 +67,7 @@ for i = 1:height-1
     end
 end
 
-percentage = 0.4;
+percentage = 0.25;
 %Check the dark areas Vertically
 for i = 1:length(segmentsY)-2
     if segmentsY(i, 4) == 0 && i > 2
@@ -115,21 +113,51 @@ for i = 1:length(segmentsX)-2
     end 
 end
 
-[L ,count] = bwlabel(findpattern, 4);
+[Labels ,nrLabels] = bwlabel(findpattern, 4);
 
-L = L/max(max(L));
+%Labels = Labels/max(max(Labels));
 
-count
+fprintf('Numer of labels: %d \n', nrLabels);
 
+%figure
+%imshow(L);
+
+% Calculate the centre point of each finding pattern we want three
+centrePoints = zeros(3,2);
+counter = 0;
+for i = 1:nrLabels
+   [row, col] = find(Labels == i);
+   meanX = round(mean(col), 0);
+   meanY = round(mean(row), 0);
+   
+   if length(row) > 1000 && length(col) > 1000
+       counter = counter+1;
+       if(counter > 3)
+          break; 
+       end
+       image(meanY-10:meanY+10, meanX-10:meanX+10) = 1;
+        
+       centrePoints(counter, 1) = meanY;
+       centrePoints(counter, 2) = meanX;
+   end
+end
+
+vec1 = [centrePoints(2, 1), centrePoints(2, 2)]-[centrePoints(1, 1), centrePoints(1, 2)];
+vec2 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(1, 1), centrePoints(1, 2)];
+vec3 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(2, 1), centrePoints(2, 2)];
+vec1 = vec1/norm(vec1)
+vec2 = vec2/norm(vec2)
+vec3 = vec3/norm(vec3)
 figure
-imshow(L);
+plot(vec1);
+hold on
+plot(vec2);
+plot(vec3);
 
-
-%%% Calculate the centre point of each finding pattern
-
-
-
-
+a = acos(dot(vec2, vec1))
+b = acos(dot(vec2, vec3))
+c = acos(dot(vec1, vec3))
+%imshow(image);
 
 
 qrImage = zeros(200);
