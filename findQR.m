@@ -118,14 +118,37 @@ end
 
 fprintf('Numer of labels: %d \n', nrLabels);
 
+%area1 = zeros(count,3);
+%countX=0;
+%countY=0;
+%%% Calculate the centre point of each finding pattern
+% for i=1:height
+%     for j=1:width
+%         for x=1:count
+%             if(L(j,i)==x)
+%                area1(x,1) = area1(x,1) + i;
+%                area1(x,2) = area1(x,2) + j;
+%                area1(x,3) = area1(x,3) + 1;
+%             end
+%         end  
+%     end
+% end
+% 
+% 
+%  for x=1:count
+%       middlepoint(x,1) = area1(x,1)/area1(x,3);
+%       middlepoint(x,2) = area1(x,2)/area1(x,3);
+%  end 
+% 
+% round(middlepoint)
+
 %figure
 %imshow(L);
 
-% Calculate the centre point of each finding pattern we want three
-centrePoints = [];
+
+centrePoints = zeros(3,2);
+
 counter = 0;
-treshold = 0.001*width;
-fprintf('treshold: %d \n', treshold);
 figure
 imshow(image)
 hold on
@@ -144,6 +167,7 @@ for i = 1:nrLabels
    nrPoints(i, 3) = meanX;
 end
 
+
 [values1, order1] = sort(nrPoints(:,1), 'descend');
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
@@ -156,9 +180,36 @@ plot([sortedNrPoints(3,3),sortedNrPoints(2, 3)], [sortedNrPoints(3,2),sortedNrPo
 plot([sortedNrPoints(1,3),sortedNrPoints(3, 3)], [sortedNrPoints(1,2),sortedNrPoints(3, 2)],'color', 'r', 'linewidth', 3)
 
 
-%Rotate the QR-code.
+% ROTATING THE IMAGE 
+vec4 = [1,0];
+% find the two points with lowest Y-coord to create a vector
+[values, order] = sort(sortedNrPoints(:,3));
+sortedCentre = sortedNrPoints(order,:);
+sortedCentre = sortedCentre(1:2,:);
+
+% Check which of the two remaining points who have highest x-coord in order
+% to get right direction of vector
+[values, order] = sort(sortedCentre(:,2),'descend');
+sortedCentre = sortedNrPoints(order,:);
+
+vecX = [sortedCentre(1,2),sortedCentre(1,3)]-[sortedCentre(2,2),sortedCentre(2,3)]; % p2-p1
+vecX = vecX/norm(vecX);
+vectorAngle = acos(dot(vecX,vec4));
+vecX
+% If vector is positive y direction rotate down
+if vecX(1,2) > 0
+    vectorAngle = -radtodeg(vectorAngle)
+else
+    vectorAngle = radtodeg(vectorAngle)
+end
+
+% Rotate image
+image = imrotate(image,vectorAngle);
+
+figure 
+imshow(image);
 
 
-
+%Extract the QR-code
 
 qrImage = zeros(200);
