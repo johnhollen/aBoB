@@ -132,28 +132,49 @@ hold on
 
 %Find centrepoints
 nrPoints = [];
+
 for i = 1:nrLabels
    [row, col] = find(Labels == i);
    
-   meanX = round(mean(col), 0);
-   meanY = round(mean(row), 0);
-   
    nr = length(row)*length(col);
-   nrPoints(i, 1) = nr;
-   nrPoints(i, 2) = meanY;
-   nrPoints(i, 3) = meanX;
+   nrPoints(i) = nr;
 end
 
-[values1, order1] = sort(nrPoints(:,1), 'descend');
-sortedNrPoints = nrPoints(order1, :);
-sortedNrPoints = sortedNrPoints(1:3, 1:3);
-sortedNrPoints
+nrPoints
 
-plot([sortedNrPoints(1,3),sortedNrPoints(2, 3)], [sortedNrPoints(1,2),sortedNrPoints(2, 2)],'color', 'r', 'linewidth', 3)
+fprintf('Nr centrePoints: %d \n', length(centrePoints));
 
-plot([sortedNrPoints(3,3),sortedNrPoints(2, 3)], [sortedNrPoints(3,2),sortedNrPoints(2, 2)],'color', 'r', 'linewidth', 3)
+%Check angle between the centrepoints
+for i = 1:length(centrePoints)-1
+    for j = i+1:length(centrePoints)
+        plot([centrePoints(i,2), centrePoints(j,2)], [centrePoints(i,1),centrePoints(j,1)],'color', 'r', 'linewidth', 3)
+    end
+end
+% for i = 1:length(centrePoints)-1
+%     fprintf('i: %d \n', i);
+%     plot([centrePoints(i,2),centrePoints(i+1,2)], [centrePoints(i,1),centrePoints(i+1,1)],'color', 'r', 'linewidth', 3)
+%     %plot([centrePoints(i,2),centrePoints(i+2,2)], [centrePoints(i+2,1),centrePoints(i+2,1)],'color', 'r', 'linewidth', 3)
+% end
 
-plot([sortedNrPoints(1,3),sortedNrPoints(3, 3)], [sortedNrPoints(1,2),sortedNrPoints(3, 2)],'color', 'r', 'linewidth', 3)
+%vec1 = [centrePoints(2, 1), centrePoints(2, 2)]-[centrePoints(1, 1), centrePoints(1, 2)]
+%vec2 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(1, 1), centrePoints(1, 2)]
+%vec3 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(2, 1), centrePoints(2, 2)]
+%vec1 = vec1/norm(vec1);
+%vec2 = vec2/norm(vec2);
+%vec3 = vec3/norm(vec3);
+%imshow(greyScale)
+%figure
+%imshow(binary)
+%plot([centrePoints(1,2),centrePoints(2, 2)], [centrePoints(1,1),centrePoints(2, 1)],'color', 'r', 'linewidth', 3)
+
+%plot([centrePoints(3,2),centrePoints(2, 2)], [centrePoints(3,1),centrePoints(2, 1)],'color', 'r', 'linewidth', 3)
+
+%plot([centrePoints(1,2),centrePoints(3, 2)], [centrePoints(1,1),centrePoints(3, 1)],'color', 'r', 'linewidth', 3)
+%plot(vec3, 'b')
+%angles
+%a = acos(dot(vec2, vec1));
+%b = acos(dot(vec2, vec3));
+%c = acos(dot(vec1, vec3));
 
 
 %Rotate the QR-code.

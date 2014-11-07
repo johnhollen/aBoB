@@ -1,8 +1,13 @@
 % Main file for testing tnm034 function 
 
-img = imread('testimages/Images_Training_1/Bygg_1.png');
-
+img = imread('testImages/Images_Training_1/Bygg_1.png');
+img2 = imread('testImages/Images_Training_1/Bygg_2.png');
+img3 = imread('testImages/Images_Training_1/Bygg_3.png');
+img4 = imread('testImages/Images_Training_1/Bygg_4.png');
 %imshow(img);
 %figure
 strOut = tnm034(img);
+strOut2 = tnm034(img2);
+strOut3 = tnm034(img3);
+strOut4 = tnm034(img4);
 
