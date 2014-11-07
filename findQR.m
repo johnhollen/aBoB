@@ -115,19 +115,37 @@ for i = 1:length(segmentsX)-2
     end 
 end
 
-[L ,count] = bwlabel(findpattern, 4);
+[L,count] = bwlabel(findpattern, 4);
 
-L = L/max(max(L));
+%L = L/max(max(L));
 
 count
 
-figure
 imshow(L);
 
-
+area1 = zeros(count,3);
+countX=0;
+countY=0;
 %%% Calculate the centre point of each finding pattern
-
-
+% for i=1:height
+%     for j=1:width
+%         for x=1:count
+%             if(L(j,i)==x)
+%                area1(x,1) = area1(x,1) + i;
+%                area1(x,2) = area1(x,2) + j;
+%                area1(x,3) = area1(x,3) + 1;
+%             end
+%         end  
+%     end
+% end
+% 
+% 
+%  for x=1:count
+%       middlepoint(x,1) = area1(x,1)/area1(x,3);
+%       middlepoint(x,2) = area1(x,2)/area1(x,3);
+%  end 
+% 
+% round(middlepoint)
 
 
 
