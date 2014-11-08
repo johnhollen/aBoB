@@ -1,8 +1,0 @@
-% Main file for testing tnm034 function 
-
-img = imread('testimages/har.png');
-
-%imshow(img);
-%figure
-strOut = tnm034(img);
-

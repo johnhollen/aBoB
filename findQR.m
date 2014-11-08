@@ -185,14 +185,16 @@ vec4 = [1,0];
 % find the two points with lowest Y-coord to create a vector
 [values, order] = sort(sortedNrPoints(:,3));
 sortedCentre = sortedNrPoints(order,:);
-sortedCentre = sortedCentre(1:2,:);
+sortedCentre = sortedCentre(1:2,2:3);
 
 % Check which of the two remaining points who have highest x-coord in order
 % to get right direction of vector
 [values, order] = sort(sortedCentre(:,2),'descend');
 sortedCentre = sortedNrPoints(order,:);
 
-vecX = [sortedCentre(1,2),sortedCentre(1,3)]-[sortedCentre(2,2),sortedCentre(2,3)]; % p2-p1
+sortedCentre
+
+vecX = [sortedCentre(2,2),sortedCentre(2,3)]-[sortedCentre(1,2),sortedCentre(1,3)]; % p2-p1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,vec4));
 vecX
@@ -206,8 +208,8 @@ end
 % Rotate image
 image = imrotate(image,vectorAngle);
 
-figure 
-imshow(image);
+%figure 
+%imshow(image);
 
 
 %Extract the QR-code
