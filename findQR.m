@@ -129,16 +129,6 @@ end
 
 fprintf('Numer of labels: %d \n', nrLabels);
 
-<<<<<<< HEAD
-centrePoints = zeros(3,2);
-
-counter = 0;
-figure
-imshow(image)
-hold on
-
-=======
->>>>>>> 6cd097f29a5896e8e0ca737330eb3a75ff6e91dc
 %Find centrepoints
 nrPoints = [];
 for i = 1:nrLabels
