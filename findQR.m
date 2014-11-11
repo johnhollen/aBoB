@@ -25,8 +25,7 @@ segmentY = 0;
 segmentsX = [];
 segmentSizeX = 0;
 segmentX = 0;
-figure
-imshow(image);
+
 
 %Check Horizontaly and Vertically
 for j = 1:width-1
@@ -67,7 +66,7 @@ for i = 1:height-1
     end
 end
 
-percentage = 0.25;
+percentage = 0.4;
 %Check the dark areas Vertically
 for i = 1:length(segmentsY)-2
     if segmentsY(i, 4) == 0 && i > 2
@@ -90,7 +89,7 @@ for i = 1:length(segmentsY)-2
         end
     end
 end
-
+%Check the dark areas Horizontally
 for i = 1:length(segmentsX)-2
    if segmentsX(i, 4) == 0 && i > 2
         %fprintf('black: %d, white: %d, black: %d, white: %d, black: %d \n',segmentsX(i-2, 1), segmentsX(i-1, 1), segmentsX(i, 1), segmentsX(i+1, 1), segmentsX(i+2, 1));
@@ -119,89 +118,78 @@ end
 
 fprintf('Numer of labels: %d \n', nrLabels);
 
-%area1 = zeros(count,3);
-%countX=0;
-%countY=0;
-%%% Calculate the centre point of each finding pattern
-% for i=1:height
-%     for j=1:width
-%         for x=1:count
-%             if(L(j,i)==x)
-%                area1(x,1) = area1(x,1) + i;
-%                area1(x,2) = area1(x,2) + j;
-%                area1(x,3) = area1(x,3) + 1;
-%             end
-%         end  
-%     end
-% end
-% 
-% 
-%  for x=1:count
-%       middlepoint(x,1) = area1(x,1)/area1(x,3);
-%       middlepoint(x,2) = area1(x,2)/area1(x,3);
-%  end 
-% 
-% round(middlepoint)
-
-%figure
-%imshow(L);
-
 centrePoints = zeros(3,2);
+
 counter = 0;
+figure
+imshow(image)
+hold on
+
+%Find centrepoints
+nrPoints = [];
 for i = 1:nrLabels
    [row, col] = find(Labels == i);
+   
    meanX = round(mean(col), 0);
    meanY = round(mean(row), 0);
    
-   if length(row) > 1000 && length(col) > 1000
-       counter = counter+1;
-       if(counter > 3)
-          break; 
-       end        
-       centrePoints(counter, 1) = meanY;
-       centrePoints(counter, 2) = meanX;
-   end
+   nr = length(row)*length(col);
+   nrPoints(i, 1) = nr;
+   nrPoints(i, 2) = meanY;
+   nrPoints(i, 3) = meanX;
 end
 
-%vec1 = [centrePoints(2, 1), centrePoints(2, 2)]-[centrePoints(1, 1), centrePoints(1, 2)]
-%vec2 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(1, 1), centrePoints(1, 2)]
-%vec3 = [centrePoints(3, 1), centrePoints(3, 2)]-[centrePoints(2, 1), centrePoints(2, 2)]
-%vec1 = vec1/norm(vec1);
-%vec2 = vec2/norm(vec2);
-%vec3 = vec3/norm(vec3);
+[~, order1] = sort(nrPoints(:,1), 'descend');
+sortedNrPoints = nrPoints(order1, :);
+sortedNrPoints = sortedNrPoints(1:3, 1:3);
+%sortedNrPoints
 
-vec4 = [1,0];
+% Find which segment..) 
 
-imshow(image)
-hold on
-plot([centrePoints(1,2),centrePoints(2, 2)], [centrePoints(1,1),centrePoints(2, 1)],'color', 'r', 'linewidth', 3)
+% Y - aligned segments
 
-plot([centrePoints(3,2),centrePoints(2, 2)], [centrePoints(3,1),centrePoints(2, 1)],'color', 'r', 'linewidth', 3)
+centresegmentsY = zeros(3,2);
+centresexgmentsX = zeros(3,2);
 
-plot([centrePoints(1,2),centrePoints(3, 2)], [centrePoints(1,1),centrePoints(3, 1)],'color', 'r', 'linewidth', 3)
-%plot(vec3, 'b')
+for x=1:length(segmentsY)
+   for z=1:3
+    if sortedNrPoints(z) <= segmentsY(x,3)
+        
+        
+    end
+    
+    
+end
+
+
+%plot([sortedNrPoints(1,3),sortedNrPoints(2, 3)], [sortedNrPoints(1,2),sortedNrPoints(2, 2)],'color', 'r', 'linewidth', 3)
+%plot([sortedNrPoints(3,3),sortedNrPoints(2, 3)], [sortedNrPoints(3,2),sortedNrPoints(2, 2)],'color', 'r', 'linewidth', 3)
+%plot([sortedNrPoints(1,3),sortedNrPoints(3, 3)], [sortedNrPoints(1,2),sortedNrPoints(3, 2)],'color', 'r', 'linewidth', 3)
 
 % ROTATING THE IMAGE 
-
+vec4 = [1,0];
 % find the two points with lowest Y-coord to create a vector
-[values, order] = sort(centrePoints(:,2));
-sortedCentre = centrePoints(order,:);
-sortedCentre = sortedCentre(1:2,:);
+[~, order] = sort(sortedNrPoints(:,3));
+sortedCentre = sortedNrPoints(order,:);
+sortedCentre = sortedCentre(1:2,2:3);
 
 % Check which of the two remaining points who have highest x-coord in order
 % to get right direction of vector
-[values, order] = sort(sortedCentre(:,1),'descend');
-sortedCentre = centrePoints(order,:);
+[~, order] = sort(sortedCentre(:,2),'descend');
+sortedCentre = sortedCentre(order,1:2);
 
-vecX = [sortedCentre(1,1),sortedCentre(1,2)]-[sortedCentre(2,1),sortedCentre(2,2)]; % p2-p1
+vecX = [sortedCentre(2,1),sortedCentre(2,2)]-[sortedCentre(1,1),sortedCentre(1,2)]; % p2-p1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,vec4));
-
 % If vector is positive y direction rotate down
 if vecX(1,2) > 0
-    vectorAngle = -radtodeg(vectorAngle)
+    vectorAngle = -radtodeg(vectorAngle);
 else
     vectorAngle = radtodeg(vectorAngle)
+end
+
+if vecX(1,1) < 0
+   vectorAngle = vectorAngle-180;
 end
 
 % Rotate image
@@ -210,7 +198,5 @@ image = imrotate(image,vectorAngle);
 figure 
 imshow(image);
 
-
 %Extract the QR-code
-
 qrImage = zeros(200);
