@@ -168,7 +168,7 @@ for i = 1:nrLabels
 end
 
 
-[values1, order1] = sort(nrPoints(:,1), 'descend');
+[~, order1] = sort(nrPoints(:,1), 'descend');
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
 sortedNrPoints
@@ -183,33 +183,35 @@ plot([sortedNrPoints(1,3),sortedNrPoints(3, 3)], [sortedNrPoints(1,2),sortedNrPo
 % ROTATING THE IMAGE 
 vec4 = [1,0];
 % find the two points with lowest Y-coord to create a vector
-[values, order] = sort(sortedNrPoints(:,3));
+[~, order] = sort(sortedNrPoints(:,3));
 sortedCentre = sortedNrPoints(order,:);
 sortedCentre = sortedCentre(1:2,2:3);
 
 % Check which of the two remaining points who have highest x-coord in order
 % to get right direction of vector
-[values, order] = sort(sortedCentre(:,2),'descend');
-sortedCentre = sortedNrPoints(order,:);
+[~, order] = sort(sortedCentre(:,2),'descend');
+sortedCentre = sortedCentre(order,1:2);
 
-sortedCentre
-
-vecX = [sortedCentre(2,2),sortedCentre(2,3)]-[sortedCentre(1,2),sortedCentre(1,3)]; % p2-p1
+vecX = [sortedCentre(2,1),sortedCentre(2,2)]-[sortedCentre(1,1),sortedCentre(1,2)]; % p2-p1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,vec4));
 vecX
 % If vector is positive y direction rotate down
 if vecX(1,2) > 0
-    vectorAngle = -radtodeg(vectorAngle)
+    vectorAngle = -radtodeg(vectorAngle);
 else
     vectorAngle = radtodeg(vectorAngle)
+end
+
+if vecX(1,1) < 0
+   vectorAngle = vectorAngle-180;
 end
 
 % Rotate image
 image = imrotate(image,vectorAngle);
 
-%figure 
-%imshow(image);
+figure 
+imshow(image);
 
 
 %Extract the QR-code
