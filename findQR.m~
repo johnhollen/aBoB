@@ -156,6 +156,31 @@ end
 [~, order1] = sort(nrPoints(:,1), 'descend');
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
+<<<<<<< HEAD
+%sortedNrPoints
+
+% Find which segment..) 
+
+% Y - aligned segments
+
+centresegmentsY = zeros(3,2);
+centresexgmentsX = zeros(3,2);
+
+for x=1:length(segmentsY)
+   for z=1:3
+    if sortedNrPoints(z) <= segmentsY(x,3)
+        
+        
+    end
+    
+    
+end
+
+
+%plot([sortedNrPoints(1,3),sortedNrPoints(2, 3)], [sortedNrPoints(1,2),sortedNrPoints(2, 2)],'color', 'r', 'linewidth', 3)
+%plot([sortedNrPoints(3,3),sortedNrPoints(2, 3)], [sortedNrPoints(3,2),sortedNrPoints(2, 2)],'color', 'r', 'linewidth', 3)
+%plot([sortedNrPoints(1,3),sortedNrPoints(3, 3)], [sortedNrPoints(1,2),sortedNrPoints(3, 2)],'color', 'r', 'linewidth', 3)
+=======
 
 realedgeX = zeros(3,4);
 realedgeY = zeros(3,4);
@@ -194,6 +219,8 @@ for i = 1:3
    plot(realedgeX(i, 4), realedgeX(i, 3), 'bo', 'linewidth', 3);
 end
     
+>>>>>>> 6cd097f29a5896e8e0ca737330eb3a75ff6e91dc
+
 % ROTATING THE IMAGE 
 vec4 = [1,0];
 % find the two points with lowest Y-coord to create a vector
