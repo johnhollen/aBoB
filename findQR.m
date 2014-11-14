@@ -3,15 +3,18 @@ function [qrImage] = findQR(image)
 image = im2double(image);
 %Check dimension and normalize image
 imageDim = size(image, 3);
-disp(sprintf('Dimension of image is %d', imageDim))
 
 greyScale = im2double(image);
+
 
 %Create greyscale image if the image is in color
 if imageDim == 3
    greyScale = (greyScale(:,:,1)+greyScale(:,:,2)+greyScale(:,:,3))/3;
 end
+
+%level = graythresh(greyScale);
 binary = binarize(greyScale);
+
 
 %Find the finder pattern
 %Look for ratio 1:1:3:1:1
@@ -66,7 +69,7 @@ for i = 1:height-1
     end
 end
 
-percentage = 0.4;
+percentage = 0.3;
 
 edgesY = [];
 edgesX = [];
@@ -88,7 +91,7 @@ for i = 1:length(segmentsY)-3
            %Check edges
            if abs(upWhite-upBlack) < percentage*upWhite && abs(downWhite-downBlack) < percentage*downWhite
               counterY = counterY+1;
-              findpattern(segmentsY(i-2, 2):segmentsY(i+2, 2), segmentsY(i-2, 3):segmentsY(i+2, 3)) = 1;
+              findpattern(segmentsY(i-2, 2):segmentsY(i+2, 2), segmentsY(i-3, 3):segmentsY(i+2, 3)) = 1;
               edgesY(counterY, 1) = segmentsY(i-3, 2);
               edgesY(counterY, 2) = segmentsY(i-3, 3);
               edgesY(counterY, 3) = segmentsY(i+3, 2);
@@ -113,7 +116,7 @@ for i = 1:length(segmentsX)-2
         if abs(middleBlack-3*leftWhite) <= percentage*middleBlack && abs(middleBlack-3*rightWhite) <= percentage*middleBlack
            if abs(leftWhite-leftBlack) < percentage*leftWhite && abs(rightWhite-rightBlack) < percentage*rightWhite
               counterX = counterX+1;
-              findpattern(segmentsX(i-2, 2):segmentsX(i+2, 2), segmentsX(i-2, 3):segmentsX(i+2, 3)) = 1;
+              findpattern(segmentsX(i-2, 2):segmentsX(i+2, 2), segmentsX(i-3, 3):segmentsX(i+2, 3)) = 1;
               edgesX(counterX, 1) = segmentsX(i-3, 2);
               edgesX(counterX, 2) = segmentsX(i-3, 3);
               edgesX(counterX, 3) = segmentsX(i+3, 2);
@@ -126,17 +129,35 @@ end
 
 [Labels ,nrLabels] = bwlabel(findpattern, 4);
 
-fprintf('Numer of labels: %d \n', nrLabels);
-
 %Find centrepoints
 nrPoints = [];
 for i = 1:nrLabels
    [row, col] = find(Labels == i);
    
-   meanX = mean(col);
-   meanY = mean(row);
+   %Check if the cornerPoints form a rectangle
+   point1 = [min(row), min(col)];
+   point2 = [min(row), max(col)];
+   point3 = [max(row), min(col)];
+   point4 = [max(row), max(col)];
    
-   nr = length(row)*length(col);
+   cx = (point1(1,2)+point2(1,2)+point3(1,2)+point4(1,2))/4;
+   cy = (point1(1,1)+point2(1,1)+point3(1,1)+point4(1,1))/4;  
+   
+   dd1=sqrt(cx-point1(1,2))+sqrt(cy-point1(1,1));
+   dd2=sqrt(cx-point2(1,2))+sqrt(cy-point2(1,1));
+   dd3=sqrt(cx-point3(1,2))+sqrt(cy-point3(1,1));
+   dd4=sqrt(cx-point4(1,2))+sqrt(cy-point4(1,1));
+   
+   treshold = 15;
+   if abs(dd1-dd2) < treshold && abs(dd1-dd3) < treshold && abs(dd1-dd4) < treshold      
+      meanX = ((min(col)+max(col))/2)-(abs(cx-((min(col)+max(col))/2)));
+      meanY = ((min(row)+max(row))/2)-(abs(cy-((min(row)+max(row))/2)));
+   else % Take the median instead
+       meanX = median(col);
+       meanY = median(row);
+   end
+
+   nr = length(row)+length(col);
    nrPoints(i, 1) = nr;
    nrPoints(i, 2) = meanY;
    nrPoints(i, 3) = meanX;
@@ -145,43 +166,6 @@ end
 [~, order1] = sort(nrPoints(:,1), 'descend');
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
-
-realedgeX = zeros(3,4);
-realedgeY = zeros(3,4);
-% Find edge again...
-
-for n=1:length(edgesX)
-   for z=1:3
-       if edgesX(n,1) <= sortedNrPoints(z,1) 
-           realedgeX(z,1) = edgesX(n,1);
-           realedgeX(z,2) = edgesX(n,2);
-           realedgeX(z,3) = edgesX(n,3);
-           realedgeX(z,4) = edgesX(n,4);
-       end
-   end
-end
-
-for n=1:length(edgesY)
-    for z=1:3
-       if edgesY(n,2) >= sortedNrPoints(z,2) 
-           realedgeY(z,1) = edgesY(n,1);
-           realedgeY(z,2) = edgesY(n,2);
-           realedgeY(z,3) = edgesY(n,3);
-           realedgeY(z,4) = edgesY(n,4);
-       end
-   end
-end
-figure
-imshow(image)
-hold on
-realedgeX
-for i = 1:3
-   plot(realedgeY(i, 2), realedgeY(i, 1), 'ro', 'linewidth', 3); 
-   plot(realedgeY(i, 4), realedgeY(i, 3), 'ro', 'linewidth', 3);
-   
-   plot(realedgeX(i, 2), realedgeX(i, 1), 'bo', 'linewidth', 3); 
-   plot(realedgeX(i, 4), realedgeX(i, 3), 'bo', 'linewidth', 3);
-end
     
 
 % ROTATING THE IMAGE 
@@ -211,12 +195,9 @@ end
 center = [size(image, 1)/2; size(image, 2)/2];
 
 % Rotate image
-image = imrotate(image,radtodeg(vectorAngle), 'bilinear', 'crop');
-binaryRotated = imrotate(binary, radtodeg(vectorAngle), 'bilinear', 'crop');
+%image = imrotate(image,radtodeg(vectorAngle), 'nearest', 'crop');
+binaryRotated = imrotate(binary, radtodeg(vectorAngle), 'bicubic', 'crop');
 
-%figure 
-%imshow(binaryRotated);
-%hold on
 
 %Crop the QR-code, first draw lines outside the code. Rotate the
 %centrepoints aswell
@@ -225,6 +206,12 @@ rotationMatrix = [cos(vectorAngle), -sin(vectorAngle); sin(vectorAngle), cos(vec
 
 rotatedCentrePoints = sortedNrPoints(1:3, 2:3);
 
+rotatedCentrePoints = sortrows(rotatedCentrePoints, 1);
+if rotatedCentrePoints(2, 2) < rotatedCentrePoints(1, 2)
+   temp = rotatedCentrePoints(1,:);
+   rotatedCentrePoints(1,:) = rotatedCentrePoints(2, :);
+   rotatedCentrePoints(2,:) = temp;
+end
 for i = 1:3    
     result = [rotatedCentrePoints(i, 1); rotatedCentrePoints(i, 2)];
     result = rotationMatrix*(result-center)+center;
@@ -232,11 +219,7 @@ for i = 1:3
     rotatedCentrePoints(i, 2) = result(2,1);
 end
 
-%plot([rotatedCentrePoints(1,2),rotatedCentrePoints(2, 2)], [rotatedCentrePoints(1,1),rotatedCentrePoints(2, 1)],'g-', 'linewidth', 3)
-%plot([rotatedCentrePoints(3,2),rotatedCentrePoints(2, 2)], [rotatedCentrePoints(3,1),rotatedCentrePoints(2, 1)],'g-', 'linewidth', 3)
-%plot([rotatedCentrePoints(1,2),rotatedCentrePoints(3, 2)], [rotatedCentrePoints(1,1),rotatedCentrePoints(3, 1)],'g-', 'linewidth', 3)
-
-%Find the edges of the QR-code
-
+%Fix the perspective in separate file
+croppedQr = fixPerspective(binaryRotated, rotatedCentrePoints);
 
 qrImage = zeros(200);
