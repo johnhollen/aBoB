@@ -2,40 +2,29 @@ function [qrCode] = decodeQR(image)
 %Function for finding and extracting the QR-code
 % Input= Image(2d/3d) CHANGE TO BINARY IMAGE LATER!!
 % Output= Decoded string of the QR image..
+%figure
+%imshow(image)
+%hold on
 
-image = im2double(image);
-%Check dimension and normalize image
-imageDim = size(image, 3);
-disp(sprintf('Dimension of image is %d', imageDim))
+binary = image;
 
-greyScale = im2double(image);
-
-%Create greyscale image if the image is in color
-if imageDim == 3
-   greyScale = (greyScale(:,:,1)+greyScale(:,:,2)+greyScale(:,:,3))/3;
-end
-binary = binarize(greyScale);
-
-imshow(binary);
-hold on
-
-% Beräkna steglängd i bilden mellan varje bit av QR-kod
+% Ber?kna stegl?ngd i bilden mellan varje bit av QR-kod
 dim = size(binary)/41;
 
-% Steglängd i x o y-led
+% Stegl?ngd i x o y-led
 stepX = dim(1);
 stepY = dim(2);
   
 
-% Temporära variabler för att ta 8 bitar i taget samt skapa en sträng av de
-% översatta bitarna
+% Tempor?ra variabler f?r att ta 8 bitar i taget samt skapa en str?ng av de
+% ?versatta bitarna
 tempString = zeros(1,8);
 totString = '';
-% Iterate 41x41 ggr över hela QR koden..
+% Iterate 41x41 ggr ?ver hela QR koden..
 count=0;
 for j=1:41
     for i=1:41
-        % Hoppa över FIP i x-led
+        % Hoppa ?ver FIP i x-led
         if j<9   
             
             if i<9 || i>33 

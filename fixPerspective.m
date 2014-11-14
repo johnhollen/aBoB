@@ -104,7 +104,6 @@ plot([edgePoint(1,1), cornerPoints(2,2)+factor*blackCount(2,2)], [edgePoint(1,2)
 
 croppedImage = imcrop(inBinary, [startPointJ, startPointI, width, height]);
 
-
 %Now, fix the perspective
 
 if size(croppedImage, 1) > size(croppedImage, 2)
@@ -192,5 +191,7 @@ plot(corner2(2),corner2(1), 'ro', 'linewidth', 3);
 plot(corner3(2),corner3(1), 'ro', 'linewidth', 3);
 plot(corner4(2),corner4(1), 'ro', 'linewidth', 3);
 
+
 straightenedImage = newcroppedImage;%zeros(200);
+
 
