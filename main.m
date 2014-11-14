@@ -11,6 +11,7 @@ img6 = imread('testImages/Husannons_full.png');
 %strOut3 = tnm034(img3);
 %strOut4 = tnm034(img4);
 %strOut5 = tnm034(img5);
+
 strOut6 = tnm034(img6);
 
 

@@ -163,7 +163,7 @@ end
 check=0;
 %Fourth corner
 for i=dimz:-1:1
-    for j=dimz:-1:1
+    for j=dimz::1
         if(croppedImage(j,i)==0)
             corner4=[j,i];
             check=1;
@@ -175,22 +175,20 @@ for i=dimz:-1:1
     end 
 end
 
-movingpoints=[corner1 ; corner2 ; corner3 ; corner4];
-fixedpoints=[0 0;0 length(croppedImage);length(croppedImage) 0;length(croppedImage) length(croppedImage)]
-
-tform = fitgeotrans(movingpoints,fixedpoints,'affine');
-
-newcroppedImage = imwarp(croppedImage,tform);
+corner1
+corner2
+corner3
+corner4
 
 figure
-imshow(newcroppedImage)
+imshow(croppedImage)
 
 hold on 
 
-plot(corner1(2),corner1(1), 'ro', 'linewidth', 3);
-plot(corner2(2),corner2(1), 'ro', 'linewidth', 3);
-plot(corner3(2),corner3(1), 'ro', 'linewidth', 3);
-plot(corner4(2),corner4(1), 'ro', 'linewidth', 3);
+plot(corner1, 'ro', 'linewidth', 3);
+plot(corner2, 'ro', 'linewidth', 3);
+plot(corner3, 'ro', 'linewidth', 3);
+plot(corner4, 'ro', 'linewidth', 3);
 
-straightenedImage = newcroppedImage;%zeros(200);
+straightenedImage = zeros(200);
 
