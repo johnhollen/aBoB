@@ -34,7 +34,7 @@ segmentX = 0;
 for j = 1:width-1
     for i = 1:height-1        
         %Vertically
-        if binary(i, j) == binary(i+1, j)
+        if binary(i, j) == binary(i+1,j)
            segmentSizeY = segmentSizeY+1;
         else
             segmentY = segmentY+1;
@@ -101,6 +101,7 @@ for i = 1:length(segmentsY)-3
         end
     end
 end
+
 counterX = 0;
 for i = 1:length(segmentsX)-2
    if segmentsX(i, 4) == 0 && i > 2
@@ -167,7 +168,6 @@ end
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
     
-
 % ROTATING THE IMAGE 
 vec4 = [1,0];
 % find the two points with lowest Y-coord to create a vector
@@ -219,7 +219,9 @@ for i = 1:3
     rotatedCentrePoints(i, 2) = result(2,1);
 end
 
+
 %Fix the perspective in separate file
 croppedQr = fixPerspective(binaryRotated, rotatedCentrePoints);
+
 
 qrImage = zeros(200);

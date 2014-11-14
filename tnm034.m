@@ -7,8 +7,9 @@ function strout = tnm034(im)
 
 
 %First step: Find the corner points, call the corresponding function
-qrImage = findQR(im);
+%qrImage = findQR(im);
 
+strout = findQR(im);
 
-string = 'tjena'; 
-strout=char(string);
+%string = 'tjena'; 
+%strout=char(string);
