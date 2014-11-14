@@ -224,4 +224,4 @@ end
 croppedQr = fixPerspective(binaryRotated, rotatedCentrePoints);
 
 
-qrImage = zeros(200);
+qrImage = croppedQr;
