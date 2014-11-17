@@ -11,7 +11,6 @@ strOut2 = tnm034(img2);
 %strOut3 = tnm034(img3);
 %strOut4 = tnm034(img4);
 %strOut5 = tnm034(img5);
-%strOut6 = tnm034(img6);
 
 fprintf('\n==========================================================\nStop main\n');
 
