@@ -2,9 +2,9 @@ function [qrCode] = decodeQR(image)
 %Function for finding and extracting the QR-code
 % Input= Image(2d/3d) CHANGE TO BINARY IMAGE LATER!!
 % Output= Decoded string of the QR image..
-%figure
-%imshow(image)
-%hold on
+figure
+imshow(image)
+hold on
 
 binary = image;
 
@@ -34,7 +34,7 @@ for j=1:41
                 if count ~= 8
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
-                    %plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);   
+                    plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);   
                 else
                     number = bi2de(tempString,'left-msb');
                     count=0;
@@ -45,7 +45,7 @@ for j=1:41
                     % Add the first dot
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
-                    %plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
+                    plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
                 end
             end
         elseif i>32 && j>32 && i<38 && j<38
@@ -58,7 +58,7 @@ for j=1:41
                 if count ~= 8
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
-                    %plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
+                    plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
                     
                 else
                     number = bi2de(tempString,'left-msb');
@@ -70,7 +70,7 @@ for j=1:41
                     % Add the first dot
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
-                    %plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
+                    plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
                 end
             end       
         else
@@ -78,7 +78,7 @@ for j=1:41
             if count ~= 8
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
-                    %plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);                 
+                    plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);                 
             else
                     number = bi2de(tempString,'left-msb');
                     count=0;
@@ -90,7 +90,7 @@ for j=1:41
                      % Add the first dot
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
-                    %plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
+                    plot(round((j-1)*stepY+stepY/2),round((i-1)*stepX+stepX/2), 'ro', 'linewidth', 1);
            end  
         end     
     end

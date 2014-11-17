@@ -2,7 +2,7 @@ function [straightenedImage] = fixPerspective(inBinary, cornerPoints)
 %This file will straighten up the image
 
 %Fix the perspective in the image 
-blackCount = [];
+blackCount = zeros(3, 3);
 search = true;
 
 %Count the black in the corners
@@ -73,7 +73,7 @@ for i = 1:length(cornerPoints)
  
    search = true;
 end
-factor = 9.0/6.5;
+factor = 9.0/6.0;
 
 startPointJ = cornerPoints(1,2)-factor*blackCount(1,2);
 startPointI = cornerPoints(1,1)-factor*blackCount(1,1);
@@ -89,91 +89,46 @@ croppedImage = imcrop(inBinary, [startPointJ, startPointI, width, height]);
 %Now, fix the perspective
 
 if size(croppedImage, 1) > size(croppedImage, 2)
-   croppedImage = imresize(croppedImage, [size(croppedImage, 1) size(croppedImage, 1)]);
+   croppedImage = imresize(croppedImage, [size(croppedImage, 1) size(croppedImage, 1)], 'nearest');
 elseif size(croppedImage, 1) < size(croppedImage, 2)
-   croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)]);
+   croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'nearest');
 end
-
-% Crop the white border that is still on the image...
-
-dimz= length(croppedImage);
-check=0;
-
-hold on
-%First corner
-for i=1:dimz
-    for j=1:dimz
-        if(croppedImage(j,i)==0)
-            corner1=[j,i];
-            check=1;
-            break;
-        end
-    end
-    if check == 1 
-        break 
-    end 
-end
-check=0;
-%Second corner
-for i=1:dimz
-    for j=dimz:-1:1
-        if(croppedImage(j,i)==0)
-            corner2=[j,i];
-            check=1;
-            break;
-        end
-    end
-    if check == 1 
-        break 
-    end 
-end
-check=0;
-%Third corner
-for i=dimz:-1:1
-    for j=1:dimz
-        if(croppedImage(j,i)==0)
-            corner3=[j,i];
-            check=1;
-            break;
-        end
-    end
-    if check == 1 
-        break 
-    end 
-end
-check=0;
-%Fourth corner
-for i=dimz:-1:1
-    for j=dimz:-1:1
-        if(croppedImage(j,i)==0)
-            corner4=[j,i];
-            check=1;
-            break;
-        end
-    end
-    if check == 1 
-        break 
-    end 
-end
-
-movingpoints=[corner1 ; corner2 ; corner3 ; corner4];
-fixedpoints=[0 0;0 length(croppedImage);length(croppedImage) 0;length(croppedImage) length(croppedImage)];
-
-tform = fitgeotrans(movingpoints,fixedpoints,'affine');
-
-newcroppedImage = imwarp(croppedImage,tform);
 
 figure
-imshow(newcroppedImage)
+imshow(croppedImage)
 
 hold on 
 
-plot(corner1(2),corner1(1), 'ro', 'linewidth', 3);
-plot(corner2(2),corner2(1), 'ro', 'linewidth', 3);
-plot(corner3(2),corner3(1), 'ro', 'linewidth', 3);
-plot(corner4(2),corner4(1), 'ro', 'linewidth', 3);
+corners = findCorners(croppedImage);
 
+plot(corners(1,1),corners(1,2), 'ro', 'linewidth', 3);
+plot(corners(2,1),corners(2,2), 'go', 'linewidth', 3);
+plot(corners(3,1),corners(3,2), 'mo', 'linewidth', 3);
+plot(corners(4,1),corners(4,2), 'co', 'linewidth', 3);
 
-straightenedImage = newcroppedImage;%zeros(200);
+movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
+fixedpoints=[1 1;1 length(croppedImage);length(croppedImage) 1;length(croppedImage) length(croppedImage)];
+
+tform = fitgeotrans(movingpoints,fixedpoints,'projective');
+newcroppedImage = imwarp(croppedImage,tform, 'nearest', 'fillvalues', 1);
+
+if size(newcroppedImage, 1) > size(newcroppedImage, 2)
+   newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 1) size(newcroppedImage, 1)], 'nearest');
+elseif size(newcroppedImage, 1) < size(newcroppedImage, 2)
+   newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 2) size(newcroppedImage, 2)], 'nearest');
+end
+
+%Crop the white from the transformed image
+newCorners = findCorners(newcroppedImage);
+
+onlyQR = imcrop(newcroppedImage,...
+    [newCorners(1,1), newCorners(1,2), norm(newCorners(1,:)-newCorners(3,:)), norm(newCorners(1,:)-newCorners(2,:))]);
+
+onlyQR = bwmorph(onlyQR, 'open');
+
+% figure
+% imshow(onlyQR)
+
+straightenedImage = onlyQR;
 
 

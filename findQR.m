@@ -161,7 +161,7 @@ sortedCentre = sortedCentre(1:2,2:3);
 
 % Check which of the two remaining points who have highest x-coord in order
 % to get right direction of vector
-[~, order] = sort(sortedCentre(:,2),'descend');
+[~, order] = sort(sortedCentre(:,2), 'descend');
 sortedCentre = sortedCentre(order,1:2);
 
 vecX = [sortedCentre(2,1),sortedCentre(2,2)]-[sortedCentre(1,1),sortedCentre(1,2)]; % p2-p1
@@ -180,8 +180,7 @@ center = [size(image, 1)/2; size(image, 2)/2];
 
 % Rotate image
 %image = imrotate(image,radtodeg(vectorAngle), 'nearest', 'crop');
-binaryRotated = imrotate(binary, radtodeg(vectorAngle), 'bicubic', 'crop');
-
+binaryRotated = imrotate(binary, radtodeg(vectorAngle), 'nearest', 'crop');
 
 %Crop the QR-code, first draw lines outside the code. Rotate the
 %centrepoints aswell
