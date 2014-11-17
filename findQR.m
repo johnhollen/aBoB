@@ -6,7 +6,6 @@ imageDim = size(image, 3);
 
 greyScale = im2double(image);
 
-
 %Create greyscale image if the image is in color
 if imageDim == 3
    greyScale = (greyScale(:,:,1)+greyScale(:,:,2)+greyScale(:,:,3))/3;
@@ -21,20 +20,21 @@ binary = binarize(greyScale);
 height = size(binary, 1);
 width = size(binary, 2);
 
-segmentsY = [];
+segmentsY = zeros(20000, 4);
 segmentSizeY = 0;
 segmentY = 0;
 
-segmentsX = [];
+segmentsX = zeros(20000, 4);
 segmentSizeX = 0;
 segmentX = 0;
 
 
-%Check Horizontaly and Vertically
+
+%Check Horizontally and Vertically
 for j = 1:width-1
     for i = 1:height-1        
         %Vertically
-        if binary(i, j) == binary(i+1,j)
+        if binary(i, j) == binary(i+1, j)
            segmentSizeY = segmentSizeY+1;
         else
             segmentY = segmentY+1;
@@ -47,11 +47,6 @@ for j = 1:width-1
         end
     end 
 end
-
-% Save last dot in the finding pattern
-findpattern = zeros(height,width);
-counter = 0;
-
 for i = 1:height-1
     for j = 1:width-1
         %Horizontally
@@ -70,13 +65,11 @@ for i = 1:height-1
 end
 
 percentage = 0.3;
-
-edgesY = [];
-edgesX = [];
 %Check the dark areas Vertically
 counterY = 0;
-for i = 1:length(segmentsY)-3
-    if segmentsY(i, 4) == 0 && i > 3
+findpattern = zeros(height,width);
+for i = 4:length(segmentsY)-3
+    if segmentsY(i, 4) == 0
 
         %fprintf('black: %d, white: %d, black: %d, white: %d, black: %d \n',segments(i-2, 1), segments(i-1, 1), segments(i, 1), segments(i+1, 1), segments(i+2, 1));
         
@@ -92,19 +85,15 @@ for i = 1:length(segmentsY)-3
            if abs(upWhite-upBlack) < percentage*upWhite && abs(downWhite-downBlack) < percentage*downWhite
               counterY = counterY+1;
               findpattern(segmentsY(i-2, 2):segmentsY(i+2, 2), segmentsY(i-3, 3):segmentsY(i+2, 3)) = 1;
-              edgesY(counterY, 1) = segmentsY(i-3, 2);
-              edgesY(counterY, 2) = segmentsY(i-3, 3);
-              edgesY(counterY, 3) = segmentsY(i+3, 2);
-              edgesY(counterY, 4) = segmentsY(i+3, 3);
-              edgesY(counterY, 5) = i;
            end
         end
     end
 end
 
 counterX = 0;
-for i = 1:length(segmentsX)-2
-   if segmentsX(i, 4) == 0 && i > 2
+
+for i = 4:length(segmentsX)-2
+   if segmentsX(i, 4) == 0
         %fprintf('black: %d, white: %d, black: %d, white: %d, black: %d \n',segmentsX(i-2, 1), segmentsX(i-1, 1), segmentsX(i, 1), segmentsX(i+1, 1), segmentsX(i+2, 1));
         
         middleBlack = segmentsX(i, 1);
@@ -118,11 +107,6 @@ for i = 1:length(segmentsX)-2
            if abs(leftWhite-leftBlack) < percentage*leftWhite && abs(rightWhite-rightBlack) < percentage*rightWhite
               counterX = counterX+1;
               findpattern(segmentsX(i-2, 2):segmentsX(i+2, 2), segmentsX(i-3, 3):segmentsX(i+2, 3)) = 1;
-              edgesX(counterX, 1) = segmentsX(i-3, 2);
-              edgesX(counterX, 2) = segmentsX(i-3, 3);
-              edgesX(counterX, 3) = segmentsX(i+3, 2);
-              edgesX(counterX, 4) = segmentsX(i+3, 3);
-              edgesX(counterX, 5) = i;
            end
         end
     end 

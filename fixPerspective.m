@@ -1,8 +1,6 @@
 function [straightenedImage] = fixPerspective(inBinary, cornerPoints)
 %This file will straighten up the image
-figure
-imshow(inBinary)
-hold on
+
 %Fix the perspective in the image 
 blackCount = [];
 search = true;
@@ -77,10 +75,6 @@ for i = 1:length(cornerPoints)
 end
 factor = 9.0/6.5;
 
-plot([cornerPoints(1,2),cornerPoints(2, 2)], [cornerPoints(1,1),cornerPoints(2, 1)],'go', 'linewidth', 3)
-plot([cornerPoints(3,2),cornerPoints(2, 2)], [cornerPoints(3,1),cornerPoints(2, 1)],'go', 'linewidth', 3)
-plot([cornerPoints(1,2),cornerPoints(3, 2)], [cornerPoints(1,1),cornerPoints(3, 1)],'go', 'linewidth', 3)
-
 startPointJ = cornerPoints(1,2)-factor*blackCount(1,2);
 startPointI = cornerPoints(1,1)-factor*blackCount(1,1);
 
@@ -89,18 +83,6 @@ width = norm(width);
 height = [cornerPoints(3,2)-factor*blackCount(3,2), cornerPoints(3,1)+factor*blackCount(3,1)]-[startPointJ, startPointI];
 height = norm(height);
 edgePoint = [startPointJ+width, startPointI+height];
-
-
-%Some testing plots
-plot([startPointJ, cornerPoints(2,2)+factor*blackCount(2,2)]...
-    , [startPointI, cornerPoints(2,1)-factor*blackCount(2,1)], 'r', 'linewidth', 3);
-
-plot([startPointJ, cornerPoints(3,2)-factor*blackCount(3,2)]...
-    , [startPointI, cornerPoints(3,1)+factor*blackCount(3,1)], 'r', 'linewidth', 3);
-
-plot([edgePoint(1,1), cornerPoints(3,2)-factor*blackCount(3,2)], [edgePoint(1,2), cornerPoints(3,1)+factor*blackCount(3,1)], 'b-', 'linewidth', 3);
-
-plot([edgePoint(1,1), cornerPoints(2,2)+factor*blackCount(2,2)], [edgePoint(1,2), cornerPoints(2,1)-factor*blackCount(2,1)], 'b-', 'linewidth', 3);
 
 croppedImage = imcrop(inBinary, [startPointJ, startPointI, width, height]);
 
