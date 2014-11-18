@@ -180,7 +180,7 @@ center = [size(image, 1)/2; size(image, 2)/2];
 
 % Rotate image
 %image = imrotate(image,radtodeg(vectorAngle), 'nearest', 'crop');
-binaryRotated = imrotate(binary, radtodeg(vectorAngle), 'nearest', 'crop');
+greyRotated = imrotate(greyScale, radtodeg(vectorAngle), 'bilinear', 'crop');
 
 %Crop the QR-code, first draw lines outside the code. Rotate the
 %centrepoints aswell
@@ -204,7 +204,7 @@ end
 
 
 %Fix the perspective in separate file
-croppedQr = fixPerspective(binaryRotated, rotatedCentrePoints);
+croppedQr = fixPerspective(greyRotated, rotatedCentrePoints);
 
 
 qrImage = croppedQr;

@@ -1,9 +1,11 @@
-function [straightenedImage] = fixPerspective(inBinary, cornerPoints)
+function [straightenedImage] = fixPerspective(inImage, cornerPoints)
 %This file will straighten up the image
 
 %Fix the perspective in the image 
 blackCount = zeros(3, 3);
 search = true;
+
+inBinary = binarize(inImage);
 
 %Count the black in the corners
 
@@ -84,18 +86,14 @@ height = [cornerPoints(3,2)-factor*blackCount(3,2), cornerPoints(3,1)+factor*bla
 height = norm(height);
 edgePoint = [startPointJ+width, startPointI+height];
 
-croppedImage = imcrop(inBinary, [startPointJ, startPointI, width, height]);
-
+croppedImage = imcrop(inImage, [startPointJ, startPointI, width, height]);
 %Now, fix the perspective
 
 if size(croppedImage, 1) > size(croppedImage, 2)
-   croppedImage = imresize(croppedImage, [size(croppedImage, 1) size(croppedImage, 1)], 'nearest');
+   croppedImage = imresize(croppedImage, [size(croppedImage, 1) size(croppedImage, 1)], 'bicubic');
 elseif size(croppedImage, 1) < size(croppedImage, 2)
-   croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'nearest');
+   croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'bicubic');
 end
-
-figure
-imshow(croppedImage)
 
 hold on 
 
@@ -110,12 +108,12 @@ movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
 fixedpoints=[1 1;1 length(croppedImage);length(croppedImage) 1;length(croppedImage) length(croppedImage)];
 
 tform = fitgeotrans(movingpoints,fixedpoints,'projective');
-newcroppedImage = imwarp(croppedImage,tform, 'nearest', 'fillvalues', 1);
+newcroppedImage = imwarp(croppedImage,tform, 'bicubic', 'fillvalues', 1);
 
 if size(newcroppedImage, 1) > size(newcroppedImage, 2)
-   newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 1) size(newcroppedImage, 1)], 'nearest');
+   newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 1) size(newcroppedImage, 1)], 'bicubic');
 elseif size(newcroppedImage, 1) < size(newcroppedImage, 2)
-   newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 2) size(newcroppedImage, 2)], 'nearest');
+   newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 2) size(newcroppedImage, 2)], 'bicubic');
 end
 
 %Crop the white from the transformed image
@@ -124,10 +122,15 @@ newCorners = findCorners(newcroppedImage);
 onlyQR = imcrop(newcroppedImage,...
     [newCorners(1,1), newCorners(1,2), norm(newCorners(1,:)-newCorners(3,:)), norm(newCorners(1,:)-newCorners(2,:))]);
 
-onlyQR = bwmorph(onlyQR, 'open');
+%onlyQR = binarize(onlyQR);
 
-% figure
-% imshow(onlyQR)
+thresh = graythresh(onlyQR);
+
+onlyQR = im2bw(onlyQR, thresh);
+%onlyQR = bwmorph(onlyQR, 'erode');
+
+figure
+imshow(onlyQR)
 
 straightenedImage = onlyQR;
 
