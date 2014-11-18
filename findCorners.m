@@ -7,6 +7,8 @@ corner3 = zeros(1, 2);
 corner4 = zeros(1, 2);
 check = false;
 
+figure, imshow(inputImage)
+
 thresh = graythresh(inputImage);
 inputImage = im2bw(inputImage, thresh);
 
@@ -44,7 +46,7 @@ for i=1:dimz
        %Verti
        for j = i:-1:1
           if inputImage(j, corner1(1)) == 0
-             corner1(1) = j; 
+             corner1(2) = j; 
           end
        end
        check = true;
@@ -185,6 +187,13 @@ for i=dimz:-1:1
        break; 
     end
 end
+figure, imshow(inputImage)
+hold on
+plot(corner1(1), corner1(2), 'rx', 'linewidth', 3)
+plot(corner2(1), corner2(2), 'rx', 'linewidth', 3)
+plot(corner3(1), corner3(2), 'rx', 'linewidth', 3)
+plot(corner4(1), corner4(2), 'rx', 'linewidth', 3)
+
 
 corners = zeros(4, 2);
 

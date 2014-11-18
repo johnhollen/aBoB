@@ -2,7 +2,7 @@ function [straightenedImage] = fixPerspective(inImage, cornerPoints)
 %This file will straighten up the image
 
 %Fix the perspective in the image 
-blackCount = zeros(3, 3);
+blackCount = zeros(3, 2);
 search = true;
 
 inBinary = binarize(inImage);
@@ -75,7 +75,8 @@ for i = 1:length(cornerPoints)
  
    search = true;
 end
-factor = 9.0/6.0;
+
+factor = 1.8;
 
 startPointJ = cornerPoints(1,2)-factor*blackCount(1,2);
 startPointI = cornerPoints(1,1)-factor*blackCount(1,1);
@@ -84,6 +85,7 @@ width = [cornerPoints(2,2)+factor*blackCount(2,2), cornerPoints(2,1)-factor*blac
 width = norm(width);
 height = [cornerPoints(3,2)-factor*blackCount(3,2), cornerPoints(3,1)+factor*blackCount(3,1)]-[startPointJ, startPointI];
 height = norm(height);
+
 edgePoint = [startPointJ+width, startPointI+height];
 
 croppedImage = imcrop(inImage, [startPointJ, startPointI, width, height]);
@@ -94,15 +96,7 @@ if size(croppedImage, 1) > size(croppedImage, 2)
 elseif size(croppedImage, 1) < size(croppedImage, 2)
    croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'bicubic');
 end
-
-hold on 
-
 corners = findCorners(croppedImage);
-
-plot(corners(1,1),corners(1,2), 'ro', 'linewidth', 3);
-plot(corners(2,1),corners(2,2), 'go', 'linewidth', 3);
-plot(corners(3,1),corners(3,2), 'mo', 'linewidth', 3);
-plot(corners(4,1),corners(4,2), 'co', 'linewidth', 3);
 
 movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
 fixedpoints=[1 1;1 length(croppedImage);length(croppedImage) 1;length(croppedImage) length(croppedImage)];
@@ -129,9 +123,4 @@ thresh = graythresh(onlyQR);
 onlyQR = im2bw(onlyQR, thresh);
 %onlyQR = bwmorph(onlyQR, 'erode');
 
-figure
-imshow(onlyQR)
-
 straightenedImage = onlyQR;
-
-

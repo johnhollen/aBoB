@@ -159,6 +159,7 @@ vec4 = [1,0];
 sortedCentre = sortedNrPoints(order,:);
 sortedCentre = sortedCentre(1:2,2:3);
 
+
 % Check which of the two remaining points who have highest x-coord in order
 % to get right direction of vector
 [~, order] = sort(sortedCentre(:,2), 'descend');
