@@ -7,45 +7,26 @@ corner3 = zeros(1, 2);
 corner4 = zeros(1, 2);
 check = false;
 
-figure, imshow(inputImage)
+%figure, imshow(inputImage)
 
 thresh = graythresh(inputImage);
-inputImage = im2bw(inputImage, thresh);
+inBinary = im2bw(inputImage, thresh);
 
 dimz= length(inputImage);
 
 %Corner one: Left, Up
-% for i=1:dimz
-%     if(inputImage(i, i) == 0)
-%         k = i-1;
-%         corner1 = [i, i];
-%         while inputImage(k, i) == 0
-%             corner1 = [i, k];
-%             k = k-1;
-%         end
-%         k = i-1;
-%         while inputImage(i, k) == 0
-%             corner1(1) = k;
-%             k = k-1;
-%         end
-%         check = true;
-%     end
-%     if check 
-%         break;
-%     end
-% end
 for i=1:dimz
-    if(inputImage(i, i) == 0)
+    if(inBinary(i, i) == 0)
        corner1 = [i, i];
        for j = i:-1:1
           %Horiz
-          if inputImage(i, j) == 0
+          if inBinary(i, j) == 0
              corner1 = [j, i]; 
           end
        end
        %Verti
        for j = i:-1:1
-          if inputImage(j, corner1(1)) == 0
+          if inBinary(j, corner1(1)) == 0
              corner1(2) = j; 
           end
        end
@@ -56,41 +37,21 @@ for i=1:dimz
     end
 end
 check = false;
+
 %Corner2: Left, Down
-% rowIndex = 1;
-% for i=dimz:-1:1
-%     if(inputImage(i, rowIndex) == 0)
-%         k = rowIndex-1;
-%         corner2 = [rowIndex, i];
-%         while inputImage(rowIndex, k) == 0
-%             corner2 = [k, i];
-%             k = k-1;
-%         end
-%         k = i-1;
-%         while inputImage(k, rowIndex) == 0
-%             corner2(2) = k;
-%             k = k+1;
-%         end
-%        check = true;
-%     end
-%     if check 
-%         break;
-%     end
-%     rowIndex = rowIndex+1;
-% end
 otherIndex = 1;
 for i=dimz:-1:1
-    if(inputImage(i, otherIndex) == 0)
+    if(inBinary(i, otherIndex) == 0)
        corner2 = [otherIndex, i];
        for j = i:-1:1
           %Horiz
-          if inputImage(i, j) == 0
+          if inBinary(i, j) == 0
              corner2 = [j, i]; 
           end
        end
        %Verti
        for j = i:dimz
-          if inputImage(j, corner2(1)) == 0
+          if inBinary(j, corner2(1)) == 0
              corner2(2) = j; 
           end
        end
@@ -102,41 +63,21 @@ for i=dimz:-1:1
     otherIndex = otherIndex+1;
 end
 check = false;
+
 %Corner3: Up, Right
-% rowIndex = dimz;
-% for i=1:dimz
-%     if(inputImage(i, rowIndex) == 0)
-%        corner3 = [rowIndex, i];
-%        k = i + 1;
-%        while inputImage(k, rowIndex) == 0
-%           corner3 = [rowIndex, k];
-%           k = k-1;
-%        end
-%        k = rowIndex+1;
-%        while inputImage(rowIndex, k) == 0
-%           corner3(1) = k;
-%           k = k+1;
-%        end
-%        check = true;
-%     end
-%     if check 
-%         break;
-%     end
-%     rowIndex = rowIndex-1;
-% end
 otherIndex = dimz;
 for i=1:dimz
-    if(inputImage(i, otherIndex) == 0)
+    if(inBinary(i, otherIndex) == 0)
        corner3 = [otherIndex, i];
        for j = i:dimz
           %Horiz
-          if inputImage(i, j) == 0
+          if inBinary(i, j) == 0
              corner3 = [j, i]; 
           end
        end
        %Verti
        for j = i:-1:1
-          if inputImage(j, corner3(1)) == 0
+          if inBinary(j, corner3(1)) == 0
              corner3(2) = j; 
           end
        end
@@ -148,26 +89,9 @@ for i=1:dimz
     otherIndex = otherIndex-1;
 end
 check = false;
-%Corner4: Down, Right
-% for i=dimz:-1:1
-%     if(inputImage(i, i) == 0)
-%        corner4 = [i, i];
-%        k = i-1;
-%        while inputImage(i, k) == 0
-%           corner4 = [k, i];
-%           k = k+1;
-%        end
-%        k = i-1;
-%        while inputImage(k, i) == 0
-%           corner(2) = k;
-%           k = k+1;
-%        end
-%        check = true;
-%     end
-%     if check 
-%         break;
-%     end
-% end
+
+%{
+Corner4: Down, Right
 for i=dimz:-1:1
     if(inputImage(i, i) == 0)
        corner4 = [i, i];
@@ -187,6 +111,41 @@ for i=dimz:-1:1
        break; 
     end
 end
+%}
+
+%Find the approx size of the QR-code
+
+width = norm(corner1 - corner3);
+height = norm(corner1 - corner2);
+
+template = ones(floor((height/41)*5), floor((width/41))*5);
+
+template(1+1/5*size(template, 1):size(template, 1)-1/5*size(template, 1),...
+    1+1/5*size(template, 2):size(template, 2)-1/5*size(template, 2)) = 0;
+
+template(1+2/5*size(template, 1):size(template, 1)-2/5*size(template, 1),...
+    1+2/5*size(template, 2):size(template, 2)-2/5*size(template, 2)) = 1;
+
+c = normxcorr2(template,inputImage);
+
+figure, imshow(c)
+
+[ypeak, xpeak]   = find(c==max(c(:)));
+% account for padding that normxcorr2 adds
+yoffSet = ypeak-size(template,1);
+xoffSet = xpeak-size(template,2);
+
+figure, imshow(template);
+
+
+figure, imshow(inputImage)
+hold on
+plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
+
+allignmentCenter = [xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2];
+
+
+%{
 figure, imshow(inputImage)
 hold on
 plot(corner1(1), corner1(2), 'rx', 'linewidth', 3)
@@ -194,7 +153,7 @@ plot(corner2(1), corner2(2), 'rx', 'linewidth', 3)
 plot(corner3(1), corner3(2), 'rx', 'linewidth', 3)
 plot(corner4(1), corner4(2), 'rx', 'linewidth', 3)
 
-
+%}
 corners = zeros(4, 2);
 
 corners(1, 1) = corner1(1);

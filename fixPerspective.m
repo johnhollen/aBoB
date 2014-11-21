@@ -86,8 +86,6 @@ width = norm(width);
 height = [cornerPoints(3,2)-factor*blackCount(3,2), cornerPoints(3,1)+factor*blackCount(3,1)]-[startPointJ, startPointI];
 height = norm(height);
 
-edgePoint = [startPointJ+width, startPointI+height];
-
 croppedImage = imcrop(inImage, [startPointJ, startPointI, width, height]);
 %Now, fix the perspective
 
