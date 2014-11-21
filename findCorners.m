@@ -118,7 +118,7 @@ end
 width = norm(corner1 - corner3);
 height = norm(corner1 - corner2);
 
-template = ones(floor((height/41)*5), floor((width/41))*5);
+template = ones(ceil((height/41)*5, 0), ceil((width/41))*5, 0);
 
 template(1+1/5*size(template, 1):size(template, 1)-1/5*size(template, 1),...
     1+1/5*size(template, 2):size(template, 2)-1/5*size(template, 2)) = 0;
