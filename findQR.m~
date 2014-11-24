@@ -211,7 +211,7 @@ end
 
 
 %Fix the perspective in separate file
-croppedQr = fixPerspective(greyRotated, rotatedCentrePoints,centreWeight);
+croppedQr = fixPerspective(greyRotated, rotatedCentrePoints);
 
 
 qrImage = croppedQr;

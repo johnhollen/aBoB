@@ -1,4 +1,4 @@
-function [corners] = findCorners(inputImage)
+function [corners ,allignmentCenter] = findCorners(inputImage)
 %FINDCORNERS Function for finding corners in cropped Qrcode image
 
 corner1 = zeros(1, 2);
@@ -118,7 +118,7 @@ end
 width = norm(corner1 - corner3);
 height = norm(corner1 - corner2);
 
-template = ones(ceil((height/41)*5, 0), ceil((width/41))*5, 0);
+template = ones(ceil((height/41)*5), ceil((width/41))*5);
 
 template(1+1/5*size(template, 1):size(template, 1)-1/5*size(template, 1),...
     1+1/5*size(template, 2):size(template, 2)-1/5*size(template, 2)) = 0;
@@ -128,21 +128,22 @@ template(1+2/5*size(template, 1):size(template, 1)-2/5*size(template, 1),...
 
 c = normxcorr2(template,inputImage);
 
-figure, imshow(c)
+%figure, imshow(c)
 
 [ypeak, xpeak]   = find(c==max(c(:)));
 % account for padding that normxcorr2 adds
 yoffSet = ypeak-size(template,1);
 xoffSet = xpeak-size(template,2);
 
-figure, imshow(template);
+%figure, imshow(template);
 
 
-figure, imshow(inputImage)
-hold on
-plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
+%figure, imshow(inputImage)
+%hold on
+%plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
 
-allignmentCenter = [xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2];
+allignmentCenter = [round(xoffSet + (xpeak-xoffSet)/2,0),round(yoffSet + (ypeak-yoffSet)/2,0)];
+
 
 
 %{
@@ -164,7 +165,6 @@ corners(3, 1) = corner3(1);
 corners(3, 2) = corner3(2);
 corners(4, 1) = corner4(1);
 corners(4, 2) = corner4(2);
-
 
 
 

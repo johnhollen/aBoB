@@ -4,9 +4,9 @@ function [straightenedImage] = fixPerspective(inImage, cornerPoints,centreWeight
 figure
 imshow(inImage);
 hold on 
- plot(cornerPoints(1,2)-centreWeight,cornerPoints(1,1)-centreWeight,'bo','linewidth',3);
- plot(cornerPoints(2,2)+centreWeight,cornerPoints(2,1)-centreWeight,'bo','linewidth',3);
- plot(cornerPoints(3,2)-centreWeight,cornerPoints(3,1)+centreWeight,'bo','linewidth',3);
+plot(cornerPoints(1,2)-centreWeight,cornerPoints(1,1)-centreWeight,'ro','linewidth',3);
+plot(cornerPoints(2,2)+centreWeight,cornerPoints(2,1)-centreWeight,'ro','linewidth',3);
+plot(cornerPoints(3,2)-centreWeight,cornerPoints(3,1)+centreWeight,'ro','linewidth',3);
 
 cornerPoints(1,:) = [cornerPoints(1,2)-centreWeight,cornerPoints(1,1)-centreWeight];
 cornerPoints(2,:) = [cornerPoints(2,2)+centreWeight,cornerPoints(2,1)-centreWeight];
@@ -16,8 +16,6 @@ cornerPoints(3,:) = [cornerPoints(3,2)-centreWeight,cornerPoints(3,1)+centreWeig
 %%%% with Harris corner detection
 
 dimz = floor(length(inImage)/100);  % 10 % of size 
-diffZ = floor(dimz/2); % To find old centrePoint
-
 
 newCorners1 = zeros(3,2);
 % The three new corners
@@ -25,19 +23,10 @@ for j=1:3
     newmatrix = inImage(cornerPoints(j,2)-dimz:cornerPoints(j,2)+dimz, ...
     cornerPoints(j,1)-dimz:cornerPoints(j,1)+dimz);
 
-    figure
-    imshow(newmatrix);
-
     newCorners1(j,:) = corner(newmatrix,'Harris',1);
 end
 
 
-
-newCorners1 = cornerPoints +(newCorners1-dimz)/dimz;
-
-% plot(newCorners1(1,2),newCorners1(1,1),'ro','linewidth',3);
-% plot(newCorners1(2,2),newCorners1(2,1),'ro','linewidth',3);
-% plot(newCorners1(3,2),newCorners1(3,1),'ro','linewidth',3);
 
 %Fix the perspective in the image 
 blackCount = zeros(3, 2);
