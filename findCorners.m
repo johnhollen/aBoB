@@ -1,4 +1,4 @@
-function [corners] = findCorners(inputImage)
+function [corners ,allignmentCenter] = findCorners(inputImage)
 %FINDCORNERS Function for finding corners in cropped Qrcode image
 
 corner1 = zeros(1, 2);
@@ -156,7 +156,6 @@ corners(3, 1) = corner3(1);
 corners(3, 2) = corner3(2);
 corners(4, 1) = fourthCorner(1);
 corners(4, 2) = fourthCorner(2);
-
 
 
 

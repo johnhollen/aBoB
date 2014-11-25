@@ -1,4 +1,4 @@
-function [straightenedImage] = fixPerspective(inImage, cornerPoints)
+function [straightenedImage] = fixPerspective(inImage, cornerPoints,centreWeight)
 %This file will straighten up the image
 
 %Fix the perspective in the image 
@@ -14,7 +14,7 @@ for i = 1:length(cornerPoints)
    row = floor(cornerPoints(i, 1));
    col = floor(cornerPoints(i, 2));
    blackCounterRow = 0;
-   
+     
    %Loop in positive direction
    while search
        if inBinary(row, col) == inBinary(row+1, col);
@@ -87,6 +87,7 @@ height = [cornerPoints(3,2)-factor*blackCount(3,2), cornerPoints(3,1)+factor*bla
 height = norm(height);
 
 croppedImage = imcrop(inImage, [startPointJ, startPointI, width, height]);
+
 %Now, fix the perspective
 
 if size(croppedImage, 1) > size(croppedImage, 2)
@@ -94,7 +95,9 @@ if size(croppedImage, 1) > size(croppedImage, 2)
 elseif size(croppedImage, 1) < size(croppedImage, 2)
    croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'bicubic');
 end
-corners = findCorners(croppedImage);
+
+[corners,AP] = findCorners(croppedImage);
+newCorners = corners;
 
 movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
 fixedpoints=[1 1;1 length(croppedImage);length(croppedImage) 1;length(croppedImage) length(croppedImage)];
@@ -108,13 +111,11 @@ elseif size(newcroppedImage, 1) < size(newcroppedImage, 2)
    newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 2) size(newcroppedImage, 2)], 'bicubic');
 end
 
-%Crop the white from the transformed image
-newCorners = findCorners(newcroppedImage);
+%Crop the white from the transformed image and find the alignment pattern!
+[newCorners,alignmentCenter] = findCorners(newcroppedImage);
 
 onlyQR = imcrop(newcroppedImage,...
     [newCorners(1,1), newCorners(1,2), norm(newCorners(1,:)-newCorners(3,:)), norm(newCorners(1,:)-newCorners(2,:))]);
-
-%onlyQR = binarize(onlyQR);
 
 thresh = graythresh(onlyQR);
 

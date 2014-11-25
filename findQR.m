@@ -151,14 +151,18 @@ end
 [~, order1] = sort(nrPoints(:,1), 'descend');
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
-    
+
+% Saving the middle area of all FP (TEST BY SIMON)
+centreWeight = floor(sqrt(sum(sortedNrPoints(:,1))/(12)))-1;
+
+%centreWeight
+
 % ROTATING THE IMAGE 
 vec4 = [1,0];
-% find the two points with lowest Y-coord to create a vector
+% find the two points with lowest X-coord to create a vector
 [~, order] = sort(sortedNrPoints(:,3));
 sortedCentre = sortedNrPoints(order,:);
 sortedCentre = sortedCentre(1:2,2:3);
-
 
 % Check which of the two remaining points who have highest x-coord in order
 % to get right direction of vector
@@ -204,8 +208,10 @@ for i = 1:3
 end
 
 
+
+
 %Fix the perspective in separate file
-croppedQr = fixPerspective(greyRotated, rotatedCentrePoints);
+croppedQr = fixPerspective(greyRotated, rotatedCentrePoints,centreWeight);
 
 
 qrImage = croppedQr;
