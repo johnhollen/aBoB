@@ -7,8 +7,6 @@ corner3 = zeros(1, 2);
 corner4 = zeros(1, 2);
 check = false;
 
-%figure, imshow(inputImage)
-
 thresh = graythresh(inputImage);
 inBinary = im2bw(inputImage, thresh);
 
@@ -118,7 +116,7 @@ end
 width = norm(corner1 - corner3);
 height = norm(corner1 - corner2);
 
-template = ones(ceil((height/41)*5, 0), ceil((width/41))*5, 0);
+template = ones(ceil((height/41)*5), ceil((width/41))*5);
 
 template(1+1/5*size(template, 1):size(template, 1)-1/5*size(template, 1),...
     1+1/5*size(template, 2):size(template, 2)-1/5*size(template, 2)) = 0;
@@ -128,32 +126,26 @@ template(1+2/5*size(template, 1):size(template, 1)-2/5*size(template, 1),...
 
 c = normxcorr2(template,inputImage);
 
-figure, imshow(c)
-
 [ypeak, xpeak]   = find(c==max(c(:)));
 % account for padding that normxcorr2 adds
 yoffSet = ypeak-size(template,1);
 xoffSet = xpeak-size(template,2);
 
-figure, imshow(template);
-
-
 figure, imshow(inputImage)
 hold on
 plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
+plot(corner1(1), corner1(2), 'ro', 'linewidth', 3)
+plot(corner2(1), corner2(2), 'ro', 'linewidth', 3)
+plot(corner3(1), corner3(2), 'ro', 'linewidth', 3)
 
-allignmentCenter = [xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2];
 
+allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
 
-%{
-figure, imshow(inputImage)
-hold on
-plot(corner1(1), corner1(2), 'rx', 'linewidth', 3)
-plot(corner2(1), corner2(2), 'rx', 'linewidth', 3)
-plot(corner3(1), corner3(2), 'rx', 'linewidth', 3)
-plot(corner4(1), corner4(2), 'rx', 'linewidth', 3)
+fourthCorner = [allignmentCenter(1)+((7/6)*allignmentCenter(1)-allignmentCenter(1)),...
+    allignmentCenter(2)+((7/6)*allignmentCenter(2))-allignmentCenter(2)];
 
-%}
+plot(fourthCorner(1), fourthCorner(2), 'bo', 'linewidth', 3)
+
 corners = zeros(4, 2);
 
 corners(1, 1) = corner1(1);
@@ -162,8 +154,8 @@ corners(2, 1) = corner2(1);
 corners(2, 2) = corner2(2);
 corners(3, 1) = corner3(1);
 corners(3, 2) = corner3(2);
-corners(4, 1) = corner4(1);
-corners(4, 2) = corner4(2);
+corners(4, 1) = fourthCorner(1);
+corners(4, 2) = fourthCorner(2);
 
 
 

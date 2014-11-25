@@ -121,4 +121,6 @@ thresh = graythresh(onlyQR);
 onlyQR = im2bw(onlyQR, thresh);
 %onlyQR = bwmorph(onlyQR, 'erode');
 
+figure, imshow(onlyQR)
+
 straightenedImage = onlyQR;
