@@ -28,25 +28,30 @@ checkArea = dimz/25; % 5% checkarea around approximated centrepoint
 for i=1:3
     area = inputImage(corners(i,2)-checkArea:corners(i,2)+checkArea,...
             corners(i,1)-checkArea:corners(i,1)+checkArea);
-    figure
-    imshow(area);
+    %figure
+    %imshow(area);
     betterCorners(i,:)=corner(area,'Harris',1);
-    hold on
-    plot(checkArea,checkArea,'go','linewidth',3);
-    plot(betterCorners(i,1),betterCorners(i,2),'ro','linewidth',3);
+    %hold on
+    %plot(checkArea,checkArea,'go','linewidth',3);
+    %plot(betterCorners(i,1),betterCorners(i,2),'ro','linewidth',3);
     
     betterCorners(i,:) = betterCorners(i,:)-[checkArea,checkArea];
     %corners(i,:) = corners(i,:)+betterCorners(i,:); 
 end
 betterCorners=round(betterCorners,0);
 corners
-for x=1:3
-    corners(i,1)=corners(i,1)+betterCorners(i,2);
-    corners(i,2)=corners(i,2)+betterCorners(i,1);   
-end
 
-corners
+    corners(1,1)=corners(1,1)+betterCorners(1,2);
+    corners(1,2)=corners(1,2)+betterCorners(1,1);
+    
+    corners(2,1)=corners(2,1)+betterCorners(3,2);
+    corners(2,2)=corners(2,2)+betterCorners(3,1);
+    
+    corners(3,1)=corners(3,1)+betterCorners(2,2);
+    corners(3,2)=corners(3,2)+betterCorners(2,1);
+
 betterCorners
+corners
 figure
 imshow(inputImage);
 hold on
