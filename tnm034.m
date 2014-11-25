@@ -8,8 +8,9 @@ fprintf('Working... \n');
 
 %First step: Find the corner points, call the corresponding function
 qrImage = findQR(im);
+strout = 'hej';
 
-strout = decodeQR(qrImage);
+%strout = decodeQR(qrImage);
 
 %string = 'tjena'; 
 %strout=char(string);
