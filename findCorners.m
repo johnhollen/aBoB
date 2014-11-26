@@ -16,12 +16,12 @@ corners(1,:) = [diff,diff];
 corners(2,:) = [dimz-diff,diff];
 corners(3,:) = [diff,dimz-diff];
 
-figure
-imshow(inputImage);
-hold on
-plot(corners(1,2),corners(1,1),'co','linewidth',3);
-plot(corners(2,2),corners(2,1),'co','linewidth',3);
-plot(corners(3,2),corners(3,1),'co','linewidth',3);
+% figure
+% imshow(inputImage);
+% hold on
+% plot(corners(1,2),corners(1,1),'co','linewidth',3);
+% plot(corners(2,2),corners(2,1),'co','linewidth',3);
+% plot(corners(3,2),corners(3,1),'co','linewidth',3);
 
 checkArea = dimz/25; % 5% checkarea around approximated centrepoint
 %Extract small areas to find corner in..
@@ -39,19 +39,16 @@ for i=1:3
     %corners(i,:) = corners(i,:)+betterCorners(i,:); 
 end
 betterCorners=round(betterCorners,0);
-corners
 
-    corners(1,1)=corners(1,1)+betterCorners(1,2);
-    corners(1,2)=corners(1,2)+betterCorners(1,1);
+corners(1,1)=corners(1,1)+betterCorners(1,2);
+corners(1,2)=corners(1,2)+betterCorners(1,1);
     
-    corners(2,1)=corners(2,1)+betterCorners(3,2);
-    corners(2,2)=corners(2,2)+betterCorners(3,1);
+corners(2,1)=corners(2,1)+betterCorners(3,2);
+corners(2,2)=corners(2,2)+betterCorners(3,1);
     
-    corners(3,1)=corners(3,1)+betterCorners(2,2);
-    corners(3,2)=corners(3,2)+betterCorners(2,1);
+corners(3,1)=corners(3,1)+betterCorners(2,2);
+corners(3,2)=corners(3,2)+betterCorners(2,1);
 
-betterCorners
-corners
 figure
 imshow(inputImage);
 hold on

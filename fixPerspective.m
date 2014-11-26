@@ -124,9 +124,11 @@ if size(croppedImage, 1) > size(croppedImage, 2)
    croppedImage = imresize(croppedImage, [size(croppedImage, 1) size(croppedImage, 1)], 'bicubic'); diff = diffX;
 elseif size(croppedImage, 1) < size(croppedImage, 2)
    croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'bicubic'); diff = diffY;
+else
+    diff=diffX;
 end
 
-[corners,AP] = findCorners(croppedImage,diff);
+[corners,AP] = findCorners2(croppedImage,diff);
 newCorners = corners;
 
 movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
