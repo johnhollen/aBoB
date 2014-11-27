@@ -53,7 +53,7 @@ hej=1;
 
 checkArea = round(checkArea,0)
 
-
+checkArea=checkArea/1.5;
 % Correction of corners!!
 for n=1:3
     switch(n)
@@ -67,6 +67,7 @@ for n=1:3
                if(sum(inBinary(corners(1,1)-checkArea:corners(1,1),corners(1,2))) < checkArea)
                    corners(1,1)=corners(1,1)-1; 
                else
+                   corners(1,1)=corners(1,1)+1; 
                    break;
                end
             end
@@ -75,6 +76,7 @@ for n=1:3
                if(sum(inBinary(corners(1,1),corners(1,2)-checkArea:corners(1,2))) < checkArea)
                    corners(1,2)=corners(1,2)-1; 
                else
+                   corners(1,2)=corners(1,2)+1; 
                    break;
                end
             
@@ -82,32 +84,35 @@ for n=1:3
         % Second corner
         case 2
         while(corners(2,2)-checkArea > 0) 
-            while(corners(2,1)+checkArea < dimz)
+            while(corners(2,1)+checkArea <= dimz)
                 
                % Walk down 
                if(sum(inBinary(corners(2,1):corners(2,1)+checkArea,corners(2,2))) < checkArea)
                    corners(2,1)=corners(2,1)+1; 
                else
+                   corners(2,1)=corners(2,1)-1;
                    break;
                end
             end
-             %Walk right
+             %Walk left
                if(sum(inBinary(corners(2,1),corners(2,2)-checkArea:corners(2,2))) < checkArea)
                    corners(2,2)=corners(2,2)-1; 
                else
+                   corners(2,2)=corners(2,2)+1;
                    break;
                end
             
         end
         % Third corner    
         case 3
-        while(corners(2,2)+checkArea < dimz) 
+        while(corners(2,2)+checkArea <= dimz) 
             while(corners(2,1)-checkArea > 0)
                 
                % Walk up 
                if(sum(inBinary(corners(3,1)-checkArea:corners(3,1),corners(3,2))) < checkArea)
                    corners(3,1)=corners(3,1)-1; 
                else
+                   corners(3,1)=corners(3,1)+1;
                    break;
                end
             end
@@ -115,6 +120,7 @@ for n=1:3
                if(sum(inBinary(corners(3,1),corners(3,2):corners(3,2)+checkArea)) < checkArea)
                    corners(3,2)=corners(3,2)+1; 
                else
+                   corners(3,2)=corners(3,2)-1;
                    break;
                end
         end          
