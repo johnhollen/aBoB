@@ -47,77 +47,73 @@ checkArea = round(checkArea/1.5,0)
 
 %checkArea=checkArea/1.5;
 % Correction of corners!!
-for n=1:3
-    switch(n)
-        % First corner
-        case 1
-         while(corners(1,2)-checkArea>0) 
-            while(corners(1,1)-checkArea>0)
-                % If sum of all pixel from corner(1,1) and 4 % to left > 0
-                % go one step left..
 
-               if(sum(inBinary(corners(1,1)-checkArea:corners(1,1),corners(1,2))) < checkArea)
-                   corners(1,1)=corners(1,1)-1; 
-               else
-                   corners(1,1)=corners(1,1)+1; 
-                   break;
-               end
-            end
-             % If sum of all pixel from corner(1,2) and 4 % to up > 0
-                % go one step left..
-               if(sum(inBinary(corners(1,1),corners(1,2)-checkArea:corners(1,2))) < checkArea)
-                   corners(1,2)=corners(1,2)-1; 
-               else
-                   corners(1,2)=corners(1,2)+1; 
-                   break;
-               end
-            
-         end
-        % Second corner
-        case 2
-        while(corners(2,2)-checkArea > 0) 
-            while(corners(2,1)+checkArea <= dimz)
-                
-               % Walk down 
-               if(sum(inBinary(corners(2,1):corners(2,1)+checkArea,corners(2,2))) < checkArea)
-                   corners(2,1)=corners(2,1)+1; 
-               else
-                   corners(2,1)=corners(2,1)-1;
-                   break;
-               end
-            end
-             %Walk left
-               if(sum(inBinary(corners(2,1),corners(2,2)-checkArea:corners(2,2))) < checkArea)
-                   corners(2,2)=corners(2,2)-1; 
-               else
-                   corners(2,2)=corners(2,2)+1;
-                   break;
-               end
-            
-        end
-        % Third corner    
-        case 3
-        while(corners(3,2)+checkArea <= dimz) 
-            while(corners(3,1)-checkArea > 0)
-                
-               % Walk up 
-               if(sum(inBinary(corners(3,1)-checkArea:corners(3,1),corners(3,2))) < checkArea)
-                   corners(3,1)=corners(3,1)-1; 
-               else
-                   corners(3,1)=corners(3,1)+1;
-                   break;
-               end
-            end
-             %Walk right
-               if(sum(inBinary(corners(3,1),corners(3,2):corners(3,2)+checkArea)) < checkArea)
-                   corners(3,2)=corners(3,2)+1; 
-               else
-                   corners(3,2)=corners(3,2)-1;
-                   break;
-               end
-        end          
+% First corner
+ while(corners(1,2)-checkArea>0) 
+    while(corners(1,1)-checkArea>0)
+        % If sum of all pixel from corner(1,1) and 4 % to left > 0
+        % go one step left..
+
+       if(sum(inBinary(corners(1,1)-checkArea:corners(1,1),corners(1,2))) < checkArea)
+           corners(1,1)=corners(1,1)-1; 
+       else
+           corners(1,1)=corners(1,1)+1; 
+           break;
+       end
     end
+     % If sum of all pixel from corner(1,2) and 4 % to up > 0
+        % go one step left..
+       if(sum(inBinary(corners(1,1),corners(1,2)-checkArea:corners(1,2))) < checkArea)
+           corners(1,2)=corners(1,2)-1; 
+       else
+           corners(1,2)=corners(1,2)+1; 
+           break;
+       end
+
+ end
+% Second corner
+while(corners(2,2)-checkArea > 0) 
+    while(corners(2,1)+checkArea <= dimz)
+
+       % Walk down 
+       if(sum(inBinary(corners(2,1):corners(2,1)+checkArea,corners(2,2))) < checkArea)
+           corners(2,1)=corners(2,1)+1; 
+       else
+           corners(2,1)=corners(2,1)-1;
+           break;
+       end
+    end
+     %Walk left
+       if(sum(inBinary(corners(2,1),corners(2,2)-checkArea:corners(2,2))) < checkArea)
+           corners(2,2)=corners(2,2)-1; 
+       else
+           corners(2,2)=corners(2,2)+1;
+           break;
+       end
+
 end
+% Third corner    
+while(corners(3,2)+checkArea <= dimz) 
+    while(corners(3,1)-checkArea > 0)
+
+       % Walk up 
+       if(sum(inBinary(corners(3,1)-checkArea:corners(3,1),corners(3,2))) < checkArea)
+           corners(3,1)=corners(3,1)-1; 
+       else
+           corners(3,1)=corners(3,1)+1;
+           break;
+       end
+    end
+     %Walk right
+       if(sum(inBinary(corners(3,1),corners(3,2):corners(3,2)+checkArea)) < checkArea)
+           corners(3,2)=corners(3,2)+1; 
+       else
+           corners(3,2)=corners(3,2)-1;
+           break;
+       end
+end          
+
+
 
 corner1 = corners(1,:);
 corner2 = corners(2,:);
@@ -150,12 +146,7 @@ c = normxcorr2(template,inputImage);
 yoffSet = ypeak-size(template,1);
 xoffSet = xpeak-size(template,2);
 
-% figure, imshow(inputImage)
-% hold on
-% plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
-% plot(corner1(2), corner1(1), 'ro', 'linewidth', 3)
-% plot(corner2(2), corner2(1), 'ro', 'linewidth', 3)
-% plot(corner3(2), corner3(1), 'ro', 'linewidth', 3)
+
 
 
 allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
@@ -163,8 +154,29 @@ allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
 fourthCorner = [allignmentCenter(1)+((7/6)*allignmentCenter(1)-allignmentCenter(1)),...
     allignmentCenter(2)+((7/6)*allignmentCenter(2))-allignmentCenter(2)];
 
-%plot(fourthCorner(2), fourthCorner(1), 'bo', 'linewidth', 3)
 
+% Increase quality of fourth corner
+checkArea = dimz/25; 
+
+area = inputImage(fourthCorner(2)-checkArea:fourthCorner(2)+checkArea,...
+       fourthCorner(1)-checkArea:fourthCorner(1)+checkArea);
+betterFourthCorner=corner(area,'Harris',1);
+
+betterFourthCorner = betterFourthCorner-[checkArea,checkArea]; 
+betterFourthCorner=round(betterFourthCorner,0);
+
+% Convert from local coords to image coord
+fourthCorner(1)=fourthCorner(1)+betterFourthCorner(1);
+fourthCorner(2)=fourthCorner(2)+betterFourthCorner(2);
+
+%fourthCorner =round(fourthCorner,0);
+
+figure, imshow(inBinary)
+hold on
+plot(corner1(2), corner1(1), 'ro', 'linewidth', 3)
+plot(corner2(2), corner2(1), 'ro', 'linewidth', 3)
+plot(corner3(2), corner3(1), 'ro', 'linewidth', 3)
+plot(fourthCorner(1), fourthCorner(2), 'bo', 'linewidth', 3)
 
 corners(4, 1) = fourthCorner(1);
 corners(4, 2) = fourthCorner(2);
