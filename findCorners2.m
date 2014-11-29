@@ -42,18 +42,10 @@ corners(3,2)=corners(3,2)+betterCorners(2,1);
 thresh = graythresh(inputImage);
 inBinary = im2bw(inputImage, thresh);
 
-
-
-corner1 = corners(1,:);
-corner2 = corners(2,:);
-corner3 = corners(3,:);
-hej=1;
 % Safety check for the three corners
+checkArea = round(checkArea/1.5,0)
 
-
-checkArea = round(checkArea,0)
-
-checkArea=checkArea/1.5;
+%checkArea=checkArea/1.5;
 % Correction of corners!!
 for n=1:3
     switch(n)
@@ -105,8 +97,8 @@ for n=1:3
         end
         % Third corner    
         case 3
-        while(corners(2,2)+checkArea <= dimz) 
-            while(corners(2,1)-checkArea > 0)
+        while(corners(3,2)+checkArea <= dimz) 
+            while(corners(3,1)-checkArea > 0)
                 
                % Walk up 
                if(sum(inBinary(corners(3,1)-checkArea:corners(3,1),corners(3,2))) < checkArea)
@@ -127,12 +119,16 @@ for n=1:3
     end
 end
 
-figure
-imshow(inBinary);
-hold on
-plot(corners(1,2),corners(1,1),'ro','linewidth',3);
-plot(corners(2,2),corners(2,1),'bo','linewidth',3);
-plot(corners(3,2),corners(3,1),'co','linewidth',3);
+corner1 = corners(1,:);
+corner2 = corners(2,:);
+corner3 = corners(3,:);
+
+% figure
+% imshow(inBinary);
+% hold on
+% plot(corner1(2),corner1(1),'ro','linewidth',3);
+% plot(corner2(2),corner2(1),'bo','linewidth',3);
+% plot(corner3(2),corner3(1),'co','linewidth',3);
 
 %Find the approx size of the QR-code
 
@@ -157,9 +153,9 @@ xoffSet = xpeak-size(template,2);
 % figure, imshow(inputImage)
 % hold on
 % plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
-% plot(corner1(1), corner1(2), 'ro', 'linewidth', 3)
-% plot(corner2(1), corner2(2), 'ro', 'linewidth', 3)
-% plot(corner3(1), corner3(2), 'ro', 'linewidth', 3)
+% plot(corner1(2), corner1(1), 'ro', 'linewidth', 3)
+% plot(corner2(2), corner2(1), 'ro', 'linewidth', 3)
+% plot(corner3(2), corner3(1), 'ro', 'linewidth', 3)
 
 
 allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
@@ -167,7 +163,8 @@ allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
 fourthCorner = [allignmentCenter(1)+((7/6)*allignmentCenter(1)-allignmentCenter(1)),...
     allignmentCenter(2)+((7/6)*allignmentCenter(2))-allignmentCenter(2)];
 
-%plot(fourthCorner(1), fourthCorner(2), 'bo', 'linewidth', 3)
+%plot(fourthCorner(2), fourthCorner(1), 'bo', 'linewidth', 3)
+
 
 corners(4, 1) = fourthCorner(1);
 corners(4, 2) = fourthCorner(2);

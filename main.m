@@ -11,15 +11,15 @@ img7 = imread('testImages/Images_Training_2/Hus_1c.png');
 img8 = imread('testImages/Images_Training_2/Hus_1d.png');
 img9 = imread('testImages/Images_Training_2/Hus_1e.png');
 
- strOut = tnm034(img)
- %strOut2 = tnm034(img2)
- strOut3 = tnm034(img3)
- %strOut4 = tnm034(img4) 
- strOut5 = tnm034(img5)
+ %strOut = tnm034(img)
+ strOut2 = tnm034(img2)
+ %strOut3 = tnm034(img3)
+% strOut4 = tnm034(img4) 
+ %strOut5 = tnm034(img5)
  %strOut6 = tnm034(img6)
- strOut7 = tnm034(img7)
+ %strOut7 = tnm034(img7)
  %strOut8 = tnm034(img8)
-strOut9 = tnm034(img9)
+%strOut9 = tnm034(img9)
 
 
 

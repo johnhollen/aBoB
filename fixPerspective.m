@@ -130,12 +130,27 @@ end
 
 [corners,AP] = findCorners2(croppedImage,diff);
 newCorners = corners;
+ figure
+ imshow(croppedImage);
+% hold on
+% plot(corners(1,2),corners(1,1),'ro','linewidth',3);
+% plot(corners(2,2),corners(2,1),'bo','linewidth',3);
+% plot(corners(3,2),corners(3,1),'go','linewidth',3);
+% plot(corners(4,2),corners(4,1),'co','linewidth',3);
 
-movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
+
+movingpoints=[corners(1,:) ; corners(3,:) ; corners(2,:) ; corners(4,:)];
 fixedpoints=[1 1;1 length(croppedImage);length(croppedImage) 1;length(croppedImage) length(croppedImage)];
 
+%plot(1,1,'mo','linewidth',3);
+%plot(1,length(croppedImage),'mo','linewidth',3);
+%plot(length(croppedImage),1,'mo','linewidth',3);
+%plot(length(croppedImage),length(croppedImage),'mo','linewidth',3);
+
 tform = fitgeotrans(movingpoints,fixedpoints,'projective');
-newcroppedImage = imwarp(croppedImage,tform, 'bicubic', 'fillvalues', 1);
+newcroppedImage = imwarp(croppedImage,tform, 'bicubic', 'fillvalues', 0);
+figure;
+imshow(newcroppedImage);
 
 if size(newcroppedImage, 1) > size(newcroppedImage, 2)
    newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 1) size(newcroppedImage, 1)], 'bicubic');
@@ -143,13 +158,18 @@ elseif size(newcroppedImage, 1) < size(newcroppedImage, 2)
    newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 2) size(newcroppedImage, 2)], 'bicubic');
 end
 
+
+
+
 %Crop the white from the transformed image and find the alignment pattern!
-%[newCorners,alignmentCenter] = findCorners(newcroppedImage,diff);
+%[newCorners,alignmentCenter] = findCorners2(newcroppedImage,diff);
 
 %onlyQR = imcrop(newcroppedImage,...
 %    [newCorners(1,1), newCorners(1,2), norm(newCorners(1,:)-newCorners(3,:)), norm(newCorners(1,:)-newCorners(2,:))]);
 
-%thresh = graythresh(onlyQR);
+
+onlyQR = newcroppedImage;
+thresh = graythresh(onlyQR);
 
 %onlyQR = im2bw(onlyQR, thresh);
 %onlyQR = bwmorph(onlyQR, 'erode');

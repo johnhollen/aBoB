@@ -206,8 +206,8 @@ for i = 1:3
     rotatedCentrePoints(i, 1) = result(1,1);
     rotatedCentrePoints(i, 2) = result(2,1);
 end
-% figure
-% imshow(greyRotated);
+%  figure
+%  imshow(greyRotated);
 % hold on
 % plot(rotatedCentrePoints(1,2)-centreWeight,rotatedCentrePoints(1,1)-centreWeight,'ro','linewidth',3);
 % plot(rotatedCentrePoints(2,2)+centreWeight,rotatedCentrePoints(2,1)-centreWeight,'ro','linewidth',3);
@@ -215,6 +215,5 @@ end
 
 %Fix the perspective in separate file
 croppedQr = fixPerspective(greyRotated, rotatedCentrePoints,centreWeight);
-
 
 qrImage = croppedQr;
