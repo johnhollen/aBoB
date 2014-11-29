@@ -10,6 +10,9 @@ check = false;
 thresh = graythresh(inputImage);
 inBinary = im2bw(inputImage, thresh);
 
+% figure, imshow(inputImage);
+% hold on
+
 dimz= length(inputImage);
 
 %Corner one: Left, Up
@@ -86,33 +89,7 @@ for i=1:dimz
     end
     otherIndex = otherIndex-1;
 end
-check = false;
-
-%{
-Corner4: Down, Right
-for i=dimz:-1:1
-    if(inputImage(i, i) == 0)
-       corner4 = [i, i];
-       for j = i:dimz
-          if inputImage(i, j) == 0
-             corner4 = [j, i]; 
-          end
-       end
-       for j = i:dimz
-          if inputImage(j, corner4(1)) == 0
-             corner4(2) = j; 
-          end
-       end
-       check = true;
-    end
-    if check
-       break; 
-    end
-end
-%}
-
 %Find the approx size of the QR-code
-
 width = norm(corner1 - corner3);
 height = norm(corner1 - corner2);
 
@@ -131,20 +108,21 @@ c = normxcorr2(template,inputImage);
 yoffSet = ypeak-size(template,1);
 xoffSet = xpeak-size(template,2);
 
-figure, imshow(inputImage)
-hold on
-plot(xoffSet + (xpeak-xoffSet)/2, yoffSet + (ypeak-yoffSet)/2, 'ro', 'linewidth', 3)
-plot(corner1(1), corner1(2), 'ro', 'linewidth', 3)
-plot(corner2(1), corner2(2), 'ro', 'linewidth', 3)
-plot(corner3(1), corner3(2), 'ro', 'linewidth', 3)
-
 
 allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
 
 fourthCorner = [allignmentCenter(1)+((7/6)*allignmentCenter(1)-allignmentCenter(1)),...
     allignmentCenter(2)+((7/6)*allignmentCenter(2))-allignmentCenter(2)];
 
-plot(fourthCorner(1), fourthCorner(2), 'bo', 'linewidth', 3)
+corner4 = fourthCorner;
+
+% plot(corner1(1), corner1(2), 'ro', 'linewidth', 2)
+% plot(corner2(1), corner2(2), 'ro', 'linewidth', 2)
+% plot(corner3(1), corner3(2), 'ro', 'linewidth', 2)
+% plot(corner4(1), corner4(2), 'ro', 'linewidth', 2)
+% plot(allignmentCenter(1), allignmentCenter(2), 'bo', 'linewidth', 2)
+% 
+% figure, imshow(template)
 
 corners = zeros(4, 2);
 
