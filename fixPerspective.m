@@ -1,4 +1,4 @@
-function [straightenedImage] = fixPerspective(inImage, cornerPoints,centreWeight)
+function [straightenedImage] = fixPerspective(inImage, cornerPoints, centreWeight)
 %This file will straighten up the image
 
 %Fix the perspective in the image 
