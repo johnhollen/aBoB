@@ -250,8 +250,6 @@ sortedNrPoints = sortedNrPoints(1:3, 1:3);
 % Saving the middle area of all FP (TEST BY SIMON)
 centreWeight = floor(sqrt(sum(sortedNrPoints(:,1))/(12)))-1;
 
-%centreWeight
-
 % ROTATING THE IMAGE 
 xAxis = [1,0];
 % find the two points with lowest X-coord to create a vector
@@ -268,20 +266,16 @@ vecX = [sortedCentre(2,2),sortedCentre(2,1)]-[sortedCentre(1,2),sortedCentre(1,1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,xAxis));
 
-vecX
-
 % If vector is positive y direction rotate down
 
 if vecX(1) < 0
    vectorAngle = vectorAngle - pi; 
 end
 
-
 center = [size(image, 1)/2; size(image, 2)/2];
 
 % Rotate image
 greyRotated = imrotate(greyScale, radtodeg(vectorAngle), 'bilinear', 'crop');
-
 
 %Crop the QR-code, first draw lines outside the code. Rotate the
 %centrepoints aswell
@@ -304,9 +298,7 @@ for i = 1:3
     rotatedCentrePoints(i, 2) = result(2,1);
 end
 
-
 %Fix the perspective in separate file
 croppedQr = fixPerspective(greyRotated, rotatedCentrePoints, centreWeight);
 
-%figure, imshow(croppedQr);
 qrImage = croppedQr;
