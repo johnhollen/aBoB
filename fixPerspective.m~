@@ -227,36 +227,16 @@ corners = findCorners(croppedImage);
 % plot(corners(2,1), corners(2,2), 'ro', 'linewidth', 2)
 % plot(corners(3,1), corners(3,2), 'ro', 'linewidth', 2)
 % plot(corners(4,1), corners(4,2), 'ro', 'linewidth', 2)
-estimatedAllignment = (length(croppedImage)/41)*7;
-fixedPoints = [1 1; 1 length(croppedImage); length(croppedImage) 1;...
-    length(croppedImage)-estimatedAllignment+estimatedAllignment/14 length(croppedImage)-estimatedAllignment+estimatedAllignment/14];
-
-
-figure, imshow(croppedImage)
-hold on
-plot(fixedPoints(1,1), fixedPoints(1,2), 'rx')
-plot(fixedPoints(2,1), fixedPoints(2,2), 'rx')
-plot(fixedPoints(3,1), fixedPoints(3,2), 'rx')
-plot(fixedPoints(4,1), fixedPoints(4,2), 'rx')
-plot(corners(4,1), corners(4,2),'bx') 
-
+fixedPoints = [1 1; 1 length(croppedImage); length(croppedImage) 1; length(croppedImage) length(croppedImage)];
 tform = fitgeotrans(corners, fixedPoints, 'projective');
 
 newWarpedImage = imwarp(croppedImage, tform, 'nearest', 'fillvalues', 1);
-
-if size(newWarpedImage, 1) > size(newWarpedImage, 2)
-   newWarpedImage = imresize(newWarpedImage, [size(newWarpedImage, 1) size(newWarpedImage, 1)], 'nearest');
-elseif size(newWarpedImage, 1) < size(newWarpedImage, 2)
-   newWarpedImage = imresize(newWarpedImage, [size(newWarpedImage, 2) size(newWarpedImage, 2)], 'nearest');
-end
-
-
-newCorners = findCorners(newWarpedImage);
+figure, imshow(binaricroppedImage)
+figure, imshow(newWarpedImage)
 
 newCroppedImage = imcrop(croppedImage, [corners(1,:), norm(corners(1,:)-corners(2,:)), norm(corners(1,:)-corners(3,:))]);
-newCroppedTest = imcrop(newWarpedImage, [newCorners(1,:), norm(newCorners(1,:)-newCorners(2,:)), norm(newCorners(1,:)-newCorners(3,:))]);
 
-figure, imshow(newCroppedTest)
+
 
 % 
 % [corners,AP] = findCorners(croppedImage);
@@ -280,7 +260,7 @@ figure, imshow(newCroppedTest)
 % onlyQR = imcrop(newcroppedImage,...
 %     [newCorners(1,1), newCorners(1,2), norm(newCorners(1,:)-newCorners(3,:)), norm(newCorners(1,:)-newCorners(2,:))]);
 % 
-onlyQR = newCroppedTest;
+onlyQR = newCroppedImage;
 thresh = graythresh(onlyQR);
 
 onlyQR = im2bw(onlyQR, thresh);

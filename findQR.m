@@ -91,39 +91,6 @@ for j = 1:step:width
 end
 
 
-% for j = 1:width-1
-%     for i = 1:height-1        
-%         %Vertically
-%         if binary(i, j) == binary(i+1, j)
-%            segmentSizeY = segmentSizeY+1;
-%         else
-%             segmentY = segmentY+1;
-%             segmentsY(segmentY, 1) = segmentSizeY;
-%             segmentsY(segmentY, 2) = i;
-%             segmentsY(segmentY, 3) = j;
-%             segmentsY(segmentY, 4) = binary(i, j);
-%             
-%             segmentSizeY = 0;
-%         end
-%     end 
-% end
-% for i = 1:height-1
-%     for j = 1:width-1
-%         %Horizontally
-%         if binary(i, j) == binary(i, j+1)
-%             segmentSizeX = segmentSizeX+1;
-%         else
-%             segmentX = segmentX+1;
-%             segmentsX(segmentX, 1) = segmentSizeX;
-%             segmentsX(segmentX, 2) = i;
-%             segmentsX(segmentX, 3) = j;
-%             segmentsX(segmentX, 4) = binary(i, j);
-% 
-%             segmentSizeX = 0;
-%         end 
-%     end
-% end
-
 percentage = 0.32;
 %Check the dark areas Vertically
 
@@ -267,8 +234,6 @@ sortedCentre = sortedCentre(order,1:2);
 vecX = [sortedCentre(2,2),sortedCentre(2,1)]-[sortedCentre(1,2),sortedCentre(1,1)]; % p2-p1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,xAxis));
-
-vecX
 
 % If vector is positive y direction rotate down
 

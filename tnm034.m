@@ -4,7 +4,6 @@ function strout = tnm034(im)
 % strout: The resulting character string of the coded 
 % The string must have exactly the number of characters that 
 % corresponds to the information in the code. 
-fprintf('Working... \n');
 
 %First step: Find the corner points, call the corresponding function
 qrImage = findQR(im);

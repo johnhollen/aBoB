@@ -115,20 +115,15 @@ xoffSet = xpeak-size(template,2);
 
 allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
 
-%fourthCorner = [allignmentCenter(1)+((8.5/6)*allignmentCenter(1)-allignmentCenter(1)),...
-    %allignmentCenter(2)+((8.5/6)*allignmentCenter(2))-allignmentCenter(2)];
-
-fourthCorner = allignmentCenter;
-
-% figure, imshow(searchArea);
-% hold on
-% plot(fourthCorner(1), fourthCorner(2), 'rx')
+fourthCorner = [allignmentCenter(1)+((7/6)*allignmentCenter(1)-allignmentCenter(1)),...
+    allignmentCenter(2)+((7/6)*allignmentCenter(2))-allignmentCenter(2)];
 
 fourthCorner = [inputX/2+fourthCorner(1), inputY/2+fourthCorner(2)];
 
 corner4 = fourthCorner;
 
-
+figure, imshow(searchArea);
+plot(fourthCorner
 
 % plot(corner1(1), corner1(2), 'ro', 'linewidth', 2)
 % plot(corner2(1), corner2(2), 'ro', 'linewidth', 2)
