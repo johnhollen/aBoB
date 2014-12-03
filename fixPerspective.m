@@ -231,14 +231,13 @@ estimatedAllignment = (length(croppedImage)/41)*7;
 fixedPoints = [1 1; 1 length(croppedImage); length(croppedImage) 1;...
     length(croppedImage)-estimatedAllignment+estimatedAllignment/14 length(croppedImage)-estimatedAllignment+estimatedAllignment/14];
 
-
-figure, imshow(croppedImage)
-hold on
-plot(fixedPoints(1,1), fixedPoints(1,2), 'rx')
-plot(fixedPoints(2,1), fixedPoints(2,2), 'rx')
-plot(fixedPoints(3,1), fixedPoints(3,2), 'rx')
-plot(fixedPoints(4,1), fixedPoints(4,2), 'rx')
-plot(corners(4,1), corners(4,2),'bx') 
+% figure, imshow(croppedImage)
+% hold on
+% plot(fixedPoints(1,1), fixedPoints(1,2), 'rx')
+% plot(fixedPoints(2,1), fixedPoints(2,2), 'rx')
+% plot(fixedPoints(3,1), fixedPoints(3,2), 'rx')
+% plot(fixedPoints(4,1), fixedPoints(4,2), 'rx')
+% plot(corners(4,1), corners(4,2),'bx') 
 
 tform = fitgeotrans(corners, fixedPoints, 'projective');
 
@@ -250,36 +249,12 @@ elseif size(newWarpedImage, 1) < size(newWarpedImage, 2)
    newWarpedImage = imresize(newWarpedImage, [size(newWarpedImage, 2) size(newWarpedImage, 2)], 'nearest');
 end
 
-
 newCorners = findCorners(newWarpedImage);
-
 newCroppedImage = imcrop(croppedImage, [corners(1,:), norm(corners(1,:)-corners(2,:)), norm(corners(1,:)-corners(3,:))]);
 newCroppedTest = imcrop(newWarpedImage, [newCorners(1,:), norm(newCorners(1,:)-newCorners(2,:)), norm(newCorners(1,:)-newCorners(3,:))]);
 
-figure, imshow(newCroppedTest)
+%figure, imshow(newCroppedTest)
 
-% 
-% [corners,AP] = findCorners(croppedImage);
-% newCorners = corners;
-% 
-% movingpoints=[corners(1,:) ; corners(2,:) ; corners(3,:) ; corners(4,:)];
-% fixedpoints=[1 1;1 length(croppedImage);length(croppedImage) 1;length(croppedImage) length(croppedImage)];
-% 
-% tform = fitgeotrans(movingpoints,fixedpoints,'projective');
-% newcroppedImage = imwarp(croppedImage,tform, 'bicubic', 'fillvalues', 1);
-% 
-% if size(newcroppedImage, 1) > size(newcroppedImage, 2)
-%    newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 1) size(newcroppedImage, 1)], 'bicubic');
-% elseif size(newcroppedImage, 1) < size(newcroppedImage, 2)
-%    newcroppedImage = imresize(newcroppedImage, [size(newcroppedImage, 2) size(newcroppedImage, 2)], 'bicubic');
-% end
-% 
-% %Crop the white from the transformed image and find the alignment pattern!
-% [newCorners,alignmentCenter] = findCorners(newcroppedImage);
-% 
-% onlyQR = imcrop(newcroppedImage,...
-%     [newCorners(1,1), newCorners(1,2), norm(newCorners(1,:)-newCorners(3,:)), norm(newCorners(1,:)-newCorners(2,:))]);
-% 
 onlyQR = newCroppedTest;
 thresh = graythresh(onlyQR);
 
