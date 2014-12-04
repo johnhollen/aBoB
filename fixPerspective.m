@@ -125,21 +125,23 @@ for i = 1:3
     
     fromCol = floor(fromCol);
     toCol = floor(toCol);
-    fromRow = floor(fromRow);
-    toRow = floor(toRow);
+    fromRow = ceil(fromRow);
+    toRow = ceil(toRow);
     
-    area = inImage(fromRow:toRow, fromCol:toCol);
+    area = inBinary(fromRow:toRow, fromCol:toCol);
     
     testCorners(i,:) = findCorners2(area, i);
+    realCorner(i, 1) = fromRow+testCorners(i, 1);
+    realCorner(i, 2) = fromCol+testCorners(i, 2);
     
 end
 testCorners
-realCorner(1, 1) = movedCornerPoints(1,1)+testCorners(1,1);
-realCorner(1, 2) = movedCornerPoints(1,2)+testCorners(1,2);
-realCorner(2, 1) = movedCornerPoints(2,1)+testCorners(3,1);
-realCorner(2, 2) = movedCornerPoints(2,2)+testCorners(3,2);
-realCorner(3, 1) = movedCornerPoints(3,1)+testCorners(2,1);
-realCorner(3, 2) = movedCornerPoints(3,2)+testCorners(2,2);
+% realCorner(1, 1) = movedCornerPoints(1,1)+testCorners(1,1);
+% realCorner(1, 2) = movedCornerPoints(1,2)+testCorners(1,2);
+% realCorner(2, 1) = movedCornerPoints(2,1)+testCorners(3,1);
+% realCorner(2, 2) = movedCornerPoints(2,2)+testCorners(3,2);
+% realCorner(3, 1) = movedCornerPoints(3,1)+testCorners(2,1);
+% realCorner(3, 2) = movedCornerPoints(3,2)+testCorners(2,2);
 
 figure, imshow(inBinary)
 hold on
@@ -147,10 +149,10 @@ hold on
 plot(realCorner(1, 2), realCorner(1,1), 'rx', 'linewidth', 3)
 plot(realCorner(2, 2), realCorner(2,1), 'rx', 'linewidth', 3)
 plot(realCorner(3, 2), realCorner(3,1), 'rx', 'linewidth', 3)
-
-plot(movedCornerPoints(1,2), movedCornerPoints(1,1), 'co')
-plot(movedCornerPoints(2,2), movedCornerPoints(2,1), 'co')
-plot(movedCornerPoints(3,2), movedCornerPoints(3,1), 'co')
+% 
+% plot(movedCornerPoints(1,2), movedCornerPoints(1,1), 'co')
+% plot(movedCornerPoints(2,2), movedCornerPoints(2,1), 'co')
+% plot(movedCornerPoints(3,2), movedCornerPoints(3,1), 'co')
 
 % if(corners(i,1)-checkArea < 1)
 %     fromRow = 1;
