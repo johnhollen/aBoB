@@ -87,12 +87,6 @@ movedCornerPoints(2,2) = cornerPoints(2,2)+factor*blackCount(2,2);
 movedCornerPoints(3,1) = cornerPoints(3,1)+factor*blackCount(3,1);
 movedCornerPoints(3,2) = cornerPoints(3,2)-factor*blackCount(3,2);
 
-% figure, imshow(inBinary)
-% hold on
-% plot(movedCornerPoints(1,2), movedCornerPoints(1,1), 'ro')
-% plot(movedCornerPoints(2,2), movedCornerPoints(2,1), 'bo')
-% plot(movedCornerPoints(3,2), movedCornerPoints(3,1), 'go')
-
 testCorners = zeros(3,2);
 realCorners = zeros(3,2);
 
@@ -135,7 +129,6 @@ for i = 1:3
     realCorner(i, 2) = fromCol+testCorners(i, 2);
     
 end
-testCorners
 % realCorner(1, 1) = movedCornerPoints(1,1)+testCorners(1,1);
 % realCorner(1, 2) = movedCornerPoints(1,2)+testCorners(1,2);
 % realCorner(2, 1) = movedCornerPoints(2,1)+testCorners(3,1);
@@ -143,39 +136,79 @@ testCorners
 % realCorner(3, 1) = movedCornerPoints(3,1)+testCorners(2,1);
 % realCorner(3, 2) = movedCornerPoints(3,2)+testCorners(2,2);
 
-figure, imshow(inBinary)
-hold on
+% figure, imshow(inBinary)
+% hold on
+% 
+% plot(realCorner(1, 2), realCorner(1,1), 'rx', 'linewidth', 3)
+% plot(realCorner(2, 2), realCorner(2,1), 'rx', 'linewidth', 3)
+% plot(realCorner(3, 2), realCorner(3,1), 'rx', 'linewidth', 3)
 
-plot(realCorner(1, 2), realCorner(1,1), 'rx', 'linewidth', 3)
-plot(realCorner(2, 2), realCorner(2,1), 'rx', 'linewidth', 3)
-plot(realCorner(3, 2), realCorner(3,1), 'rx', 'linewidth', 3)
-% 
-% plot(movedCornerPoints(1,2), movedCornerPoints(1,1), 'co')
-% plot(movedCornerPoints(2,2), movedCornerPoints(2,1), 'co')
-% plot(movedCornerPoints(3,2), movedCornerPoints(3,1), 'co')
+%Find the fourth corner!
+cellHeight = ((blackCount(1,1)+blackCount(2,1)+blackCount(3,1))/3)/3;
+cellWidth = ((blackCount(1,2)+blackCount(2,2)+blackCount(3,2))/3)/3;
 
-% if(corners(i,1)-checkArea < 1)
-%     fromRow = 1;
-% else
-%     fromRow=corners(i,1)-checkArea;
-% end
-% 
-% if(corners(i,1)+checkArea > dimz)
-%     toRow = dimz;
-% else
-%     toRow = corners(i,1)+checkArea; 
-% end
-% if(corners(i,2)-checkArea < 1)
-%     fromCol = 1;
-% else
-%     toCol = corners(i,2)-checkArea
-% end
-% if(corners(i,2)+checkArea > dimz)
-%     toCol=dimz;
-% else
-%     toCol = corners(i,2)+checkArea; 
-% end
-% 
+estHeight = cellHeight*41;
+estWidth = cellWidth*41;
+
+template = ones(ceil(cellHeight*5), ceil(cellWidth*5));
+
+template(1+1/5*size(template, 1):size(template, 1)-1/5*size(template, 1),...
+    1+1/5*size(template, 2):size(template, 2)-1/5*size(template, 2)) = 0;
+
+template(1+2/5*size(template, 1):size(template, 1)-2/5*size(template, 1),...
+    1+2/5*size(template, 2):size(template, 2)-2/5*size(template, 2)) = 1;
+
+searchWidth = norm([realCorner(1,2), realCorner(1,1)]-[realCorner(2,2), realCorner(2,1)]);
+searchHeight = norm([realCorner(1,2), realCorner(1,1)]-[realCorner(3,2), realCorner(3,1)]);
+
+searchIm = imcrop(inImage, [realCorner(1,2)+searchWidth/2 realCorner(1,1)+searchHeight/2 searchWidth/2, searchHeight/2]);
+
+c = normxcorr2(template, searchIm);
+
+[ypeak, xpeak]   = find(c==max(c(:)));
+% account for padding that normxcorr2 adds
+yoffSet = ypeak-size(template,1);
+xoffSet = xpeak-size(template,2);
+
+
+allignmentCenter = [xoffSet+(xpeak-xoffSet)/2, yoffSet+(ypeak-yoffSet)/2];
+
+%Transform allignmentcenter to image coordinates
+
+realAllign(1,1) = realCorner(1,1)+searchHeight/2+allignmentCenter(1,2);
+realAllign(1,2) = realCorner(1,2)+searchWidth/2+allignmentCenter(1,1);
+% plot(realAllign(1,2), realAllign(1,1), 'go', 'linewidth', 3)
+% plot(realCorner(1,2)+estWidth, realCorner(1,1)+estHeight, 'co', 'linewidth', 3)
+% plot(realCorner(1,2)+estWidth, realCorner(1,1), 'co', 'linewidth', 3)
+% plot(realCorner(1,2), realCorner(1,1)+estHeight, 'co', 'linewidth', 3)
+
+%Fix the perspective 
+
+fixedPoints = [realCorner(1,2) realCorner(1,1); realCorner(1,2)+estWidth realCorner(1,1);...
+    realCorner(1,2) realCorner(1,1)+estHeight; realCorner(1,2)+estWidth-(6.25)*cellWidth realCorner(1,1)+estHeight-(6.25)*cellHeight];
+
+movingPoints = [realCorner(1,2) realCorner(1,1); realCorner(2,2) realCorner(2,1);...
+    realCorner(3,2) realCorner(3,1); realAllign(1,2) realAllign(1,1)]; 
+
+tform = fitgeotrans(movingPoints, fixedPoints, 'projective');
+warpedImage = imwarp(inImage, tform, 'linear', 'outputview', imref2d(size(inImage)), 'fillvalues', 1);
+
+cropWidth = norm([realCorner(1,2) realCorner(1,1)]-[realCorner(1,2)+estWidth realCorner(1,1)]);
+cropHeight = norm([realCorner(1,2) realCorner(1,1)]-[realCorner(1,2) realCorner(1,1)+estHeight]);
+
+croppedImage = imcrop(warpedImage, [realCorner(1,2) realCorner(1,1) cropWidth cropHeight]);
+%figure, imshow(croppedImage);
+
+if size(croppedImage, 1) > size(croppedImage, 2)
+   croppedImage = imresize(croppedImage, [size(croppedImage, 1) size(croppedImage, 1)], 'nearest');
+elseif size(croppedImage, 1) < size(croppedImage, 2)
+   croppedImage = imresize(croppedImage, [size(croppedImage, 2) size(croppedImage, 2)], 'nearest');
+end
+
+thresh = graythresh(croppedImage);
+onlyQR = im2bw(croppedImage, thresh);
+
+straightenedImage = onlyQR;
 
 % image(fromRow:toRow,fromCol:toCol);
 
@@ -308,4 +341,4 @@ plot(realCorner(3, 2), realCorner(3,1), 'rx', 'linewidth', 3)
 
 
 
-straightenedImage = zeros(200);
+
