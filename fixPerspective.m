@@ -174,6 +174,7 @@ plot(movedCornerPoints(3,2), movedCornerPoints(3,1), 'co')
 %     toCol = corners(i,2)+checkArea; 
 % end
 % 
+
 % image(fromRow:toRow,fromCol:toCol);
 
 % row = floor(movedCornerPoints(1,1));
@@ -302,5 +303,7 @@ plot(movedCornerPoints(3,2), movedCornerPoints(3,1), 'co')
 % %onlyQR = binarize(croppedImage);
 %  
 % %figure, imshow(onlyQR)
+
+
 
 straightenedImage = zeros(200);

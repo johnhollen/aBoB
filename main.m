@@ -39,6 +39,14 @@ img31 = imread('testImages/Images_Training_2/Hus_1d.png');
 img32 = imread('testImages/Images_Training_2/Hus_1e.png');
 
 
+% slCharacterEncoding('UTF-8');
+% directory = dir('testImages');
+
+% fileID = fopen('exp.txt','w');
+% fprintf(fileID,'%6s %12s\n','x','exp(x)');
+% fprintf(fileID,'%6.2f %12.8f\n',A);
+% fclose(fileID);
+
 % strOut = tnm034(img)
 % strOut2 = tnm034(img2)
 % strOut3 = tnm034(img3)
@@ -72,7 +80,31 @@ strOut26 = tnm034(img26)
 % strOut31 = tnm034(img31)
 % strOut32 = tnm034(img32)
 
-
+% fileID = fopen('QRans.txt','w');
+% fprintf(fileID,'%12s  %18s\n','Image','Text');
+% 
+% 
+% counter=1;
+% for i=1:1%length(directory)
+%     folder =strcat('testImages/Images_Training_',num2str(i));
+%     imagefiles = dir(folder); 
+%     for j=1:length(imagefiles)
+%         if(strcmp(imagefiles(j).name,'.')  || strcmp(imagefiles(j).name,'..'))
+%         
+%         else
+%            currentfilename = imagefiles(j).name;
+%            currentimage = imread(strcat(folder,'/',currentfilename));
+%            
+%            code = tnm034(currentimage);% String decoded
+%            fprintf(fileID,'%s \t\t %12s \n \n',currentfilename,code);
+%            fprintf(fileID,' --------------- \n \n');
+%            %images{counter} = currentimage;
+%            %counter = counter+1; 
+%         end
+%     end
+% end
+% 
+% fclose(fileID);
 
 fprintf('\n==========================================================\nStop main\n');
 
