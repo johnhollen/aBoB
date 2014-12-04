@@ -1,5 +1,9 @@
 % Main file for testing tnm034 function 
+clc
 fprintf('\nStart main \n========================================================== \n\n');
+
+close all
+
 
 img = imread('testImages/Images_Training_1/Bygg_1.png');
 img2 = imread('testImages/Images_Training_1/Bygg_1a.png');
@@ -35,38 +39,38 @@ img31 = imread('testImages/Images_Training_2/Hus_1d.png');
 img32 = imread('testImages/Images_Training_2/Hus_1e.png');
 
 
-strOut = tnm034(img)
-strOut2 = tnm034(img2)
-strOut3 = tnm034(img3)
-strOut4 = tnm034(img4)
-strOut5 = tnm034(img5)
-strOut6 = tnm034(img6)
-strOut7 = tnm034(img7)
-strOut8 = tnm034(img8)
-strOut9 = tnm034(img9)
-strOut10 = tnm034(img10)
-strOut11 = tnm034(img11)
+% strOut = tnm034(img)
+% strOut2 = tnm034(img2)
+% strOut3 = tnm034(img3)
+% strOut4 = tnm034(img4)
+% strOut5 = tnm034(img5)
+% strOut6 = tnm034(img6)
+% strOut7 = tnm034(img7)
+% strOut8 = tnm034(img8)
+% strOut9 = tnm034(img9)
+% strOut10 = tnm034(img10)
+% strOut11 = tnm034(img11)
 strOut12 = tnm034(img12)
-strOut13 = tnm034(img13)
-strOut14 = tnm034(img14)
-strOut15 = tnm034(img15)
-strOut16 = tnm034(img16)
-strOut17 = tnm034(img17)
-strOut18 = tnm034(img18)
-strOut19 = tnm034(img19)
-strOut20 = tnm034(img20)
-strOut21 = tnm034(img21)
-strOut22 = tnm034(img22)
-strOut23 = tnm034(img23)
-strOut24 = tnm034(img24)
+% strOut13 = tnm034(img13)
+% strOut14 = tnm034(img14)
+% strOut15 = tnm034(img15)
+% strOut16 = tnm034(img16)
+% strOut17 = tnm034(img17)
+% strOut18 = tnm034(img18)
+% strOut19 = tnm034(img19)
+% strOut20 = tnm034(img20)
+% strOut21 = tnm034(img21)
+% strOut22 = tnm034(img22)
+% strOut23 = tnm034(img23)
+% strOut24 = tnm034(img24)
 strOut25 = tnm034(img25)
 strOut26 = tnm034(img26)
-strOut27 = tnm034(img27)
-strOut28 = tnm034(img28)
-strOut29 = tnm034(img29)
-strOut30 = tnm034(img30)
-strOut31 = tnm034(img31)
-strOut32 = tnm034(img32)
+% strOut27 = tnm034(img27)
+% strOut28 = tnm034(img28)
+% strOut29 = tnm034(img29)
+% strOut30 = tnm034(img30)
+% strOut31 = tnm034(img31)
+% strOut32 = tnm034(img32)
 
 
 

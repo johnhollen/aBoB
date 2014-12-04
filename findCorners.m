@@ -127,13 +127,13 @@ fourthCorner = allignmentCenter;
 fourthCorner = [inputX/2+fourthCorner(1), inputY/2+fourthCorner(2)];
 
 corner4 = fourthCorner;
-
-
-
-% plot(corner1(1), corner1(2), 'ro', 'linewidth', 2)
-% plot(corner2(1), corner2(2), 'ro', 'linewidth', 2)
-% plot(corner3(1), corner3(2), 'ro', 'linewidth', 2)
-% plot(corner4(1), corner4(2), 'ro', 'linewidth', 2)
+thresh = graythresh(inputImage);
+figure, imshow(inBinary)
+hold on
+plot(corner1(1), corner1(2), 'ro', 'linewidth', 2)
+plot(corner2(1), corner2(2), 'ro', 'linewidth', 2)
+plot(corner3(1), corner3(2), 'ro', 'linewidth', 2)
+plot(fourthCorner(1), fourthCorner(2), 'ro', 'linewidth', 2)
 % plot(allignmentCenter(1), allignmentCenter(2), 'bo', 'linewidth', 2)
 % 
 % figure, imshow(template)
