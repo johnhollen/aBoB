@@ -90,10 +90,11 @@ for j = 1:step:width
    end   
 end
 
-
+%Error margin percentage
 percentage = 0.32;
 %Check the dark areas Vertically
 
+%Look up the fiducial marks
 findpattern = zeros(height,width);
 for i = 4:length(segmentsY)-3
     if segmentsY(i, 4) == 0        
@@ -113,8 +114,6 @@ for i = 4:length(segmentsY)-3
         end
     end
 end
-
-
 
 for i = 4:length(segmentsX)-2
    if segmentsX(i, 4) == 0        
@@ -163,7 +162,7 @@ for i = 1:nrLabels
    lefterCoord = [0,0];
    righterCoord = [0,0];
    
-   
+   %Make sure we get the center of the fiducial mark
    while binary(tempIndexI, tempIndexJ) == 0 && tempIndexI > 1%Count black pixels again
       tempIndexI = tempIndexI - 1;
       %blackCounterI = blackCounterI + 1;
@@ -214,12 +213,10 @@ end
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
 
-% Saving the middle area of all FP (TEST BY SIMON)
-centreWeight = floor(sqrt(sum(sortedNrPoints(:,1))/(12)))-1;
 
 %centreWeight
 
-% ROTATING THE IMAGE 
+%Rotate the image to be in line with x-axis
 xAxis = [1,0];
 % find the two points with lowest X-coord to create a vector
 [~, order] = sort(sortedNrPoints(:,2), 'ascend');
@@ -235,8 +232,8 @@ vecX = [sortedCentre(2,2),sortedCentre(2,1)]-[sortedCentre(1,2),sortedCentre(1,1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,xAxis));
 
-% If vector is positive y direction rotate down
 
+%Adjustment of the rotation
 if vecX(1) < 0
    vectorAngle = vectorAngle - pi; 
 end
@@ -255,13 +252,15 @@ rotationMatrix = [cos(vectorAngle), -sin(vectorAngle); sin(vectorAngle), cos(vec
 
 rotatedCentrePoints = sortedNrPoints(1:3, 2:3);
 
-
+%Do the old switcheroo
 rotatedCentrePoints = sortrows(rotatedCentrePoints, 1);
 if rotatedCentrePoints(2, 2) < rotatedCentrePoints(1, 2)
    temp = rotatedCentrePoints(1,:);
    rotatedCentrePoints(1,:) = rotatedCentrePoints(2, :);
    rotatedCentrePoints(2,:) = temp;
 end
+
+%Rotate the cornerpoints with the same amount as the image
 for i = 1:3    
     result = [rotatedCentrePoints(i, 1); rotatedCentrePoints(i, 2)];
     result = rotationMatrix*(result-center)+center;
@@ -271,7 +270,7 @@ end
 
 
 %Fix the perspective in separate file
-croppedQr = fixPerspective(greyRotated, rotatedCentrePoints, centreWeight);
+croppedQr = fixPerspective(greyRotated, rotatedCentrePoints);
 
 %figure, imshow(croppedQr);
 qrImage = croppedQr;

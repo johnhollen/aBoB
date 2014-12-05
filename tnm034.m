@@ -5,7 +5,7 @@ function strout = tnm034(im)
 % The string must have exactly the number of characters that 
 % corresponds to the information in the code. 
 
-%First step: Find the corner points, call the corresponding function
+%Everything happens in findQR. 
 qrImage = findQR(im);
 
 strout = decodeQR(qrImage);
