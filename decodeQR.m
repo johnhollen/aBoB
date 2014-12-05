@@ -35,10 +35,10 @@ for j=1:41
                 else
                     number = bi2de(tempString,'left-msb');
                     count=0;
-                    if(number > 31 && number < 400)
+                    %if(number > 31 && number < 400)
                         s1 = char(number);
                         totString = [totString s1];
-                    end
+                    %end
                     % Add the first dot
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
@@ -59,10 +59,10 @@ for j=1:41
                 else
                     number = bi2de(tempString,'left-msb');
                     count=0;
-                    if(number > 31 && number < 400)
+                    %if(number > 31 && number < 400)
                         s1 = char(number);
                         totString = [totString s1];
-                    end
+                    %end
                     % Add the first dot
                     count=count+1;
                     tempString(count)= binary(round((i-1)*stepX+stepX/2),round((j-1)*stepY+stepY/2));
@@ -78,10 +78,10 @@ for j=1:41
             else
                     number = bi2de(tempString,'left-msb');
                     count=0;
-                    if(number > 31 && number < 400)
+                    %if(number > 31 && number < 400)
                         s1 = char(number);
                         totString = [totString s1];
-                    end
+                    %end
                   
                      % Add the first dot
                     count=count+1;
