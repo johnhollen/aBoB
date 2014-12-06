@@ -38,8 +38,8 @@ for i=1:length(directory)
            currentimage = imread(strcat(folder,'/',currentfilename));
            
            code = tnm034(currentimage);% String decoded
-           fprintf(fileID,'%s \t\t %12s \n \n',currentfilename,code);
-           fprintf(fileID,' --------------- \n \n');
+           fprintf(fileID,'%s \n\n%12s \n \n',currentfilename,code);
+           fprintf(fileID,'--------------- \n \n');
         
         end
     end
