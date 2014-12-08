@@ -218,16 +218,17 @@ sortedNrPoints = sortedNrPoints(1:3, 1:3);
 
 %Rotate the image to be in line with x-axis
 xAxis = [1,0];
-% find the two points with lowest X-coord to create a vector
+% find the two points with lowest Y-coord to create a vector
 [~, order] = sort(sortedNrPoints(:,2), 'ascend');
 sortedCentre = sortedNrPoints(order,:);
 sortedCentre = sortedCentre(1:2,2:3);
 
-% Check which of the two remaining points who have highest x-coord in order
+% Check which of the two remaining points who have lowest x-coord in order
 % to get right direction of vector
 [~, order] = sort(sortedCentre(:,1), 'ascend');
 sortedCentre = sortedCentre(order,1:2);
 
+% Perform vector operation in order to calculate the angle 
 vecX = [sortedCentre(2,2),sortedCentre(2,1)]-[sortedCentre(1,2),sortedCentre(1,1)]; % p2-p1
 vecX = vecX/norm(vecX);
 vectorAngle = acos(dot(vecX,xAxis));
