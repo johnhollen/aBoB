@@ -18,6 +18,7 @@ t = 15;
 sdiv = floor(s/2);
 
 %Treshold
+%Vectorized version
 
 i = 1:1:height;
 j = 1:1:width;

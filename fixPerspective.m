@@ -190,6 +190,19 @@ movingPoints = [realCorner(1,2) realCorner(1,1); realCorner(2,2) realCorner(2,1)
 tform = fitgeotrans(movingPoints, fixedPoints, 'projective');
 warpedImage = imwarp(inImage, tform, 'linear', 'outputview', imref2d(size(inImage)), 'fillvalues', 1);
 
+% figure, imshow(warpedImage)
+% hold on 
+% 
+% plot(realCorner(1,2), realCorner(1,1), 'ro', 'linewidth', 4)
+% plot(realCorner(2,2), realCorner(2,1), 'ro', 'linewidth', 4)
+% plot(realCorner(3,2), realCorner(3,1), 'ro', 'linewidth', 4)
+% plot(realAllign(1,2), realAllign(1,1), 'ro', 'linewidth', 4)
+% 
+% plot(fixedPoints(1,1), fixedPoints(1,2), 'co', 'linewidth', 4)
+% plot(fixedPoints(2,1), fixedPoints(2,2), 'co', 'linewidth', 4)
+% plot(fixedPoints(3,1), fixedPoints(3,2), 'co', 'linewidth', 4)
+% plot(estAllignment(1,2), estAllignment(1,1), 'co', 'linewidth', 4)
+
 cropWidth = norm([realCorner(1,2) realCorner(1,1)]-[realCorner(1,2)+estWidth realCorner(1,1)]);
 cropHeight = norm([realCorner(1,2) realCorner(1,1)]-[realCorner(1,2) realCorner(1,1)+estHeight]);
 

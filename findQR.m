@@ -131,6 +131,7 @@ for i = 4:length(segmentsX)-2
         end
     end 
 end
+
 [Labels ,nrLabels] = bwlabel(findpattern, 4);
 
 %Find centrepoints
@@ -212,6 +213,8 @@ end
 [~, order1] = sort(nrPoints(:,1), 'descend');
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
+
+Labels = Labels*255;
 
 
 %centreWeight
