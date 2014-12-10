@@ -1,0 +1,51 @@
+\begin{thebibliography}{1}
+
+\bibitem{fitgeotrans}
+Mathworks, documentation of matlab function fitgeotrans.
+\newblock \url{http://se.mathworks.com/help/images/ref/fitgeotrans.html}.
+\newblock Accessed: 2014-12-10.
+
+\bibitem{imwarp}
+Mathworks, documentation of matlab function imwarp.
+\newblock \url{http://se.mathworks.com/help/images/ref/imwarp.html}.
+\newblock Accessed: 2014-12-10.
+
+\bibitem{mldivide}
+Mathworks, documentation of matlab function mldivide.
+\newblock \url{http://se.mathworks.com/help/matlab/ref/mldivide.html}.
+\newblock Accessed: 2014-12-10.
+
+\bibitem{normxcorr}
+Mathworks, documentation of matlab function normxcorr2.
+\newblock \url{http://se.mathworks.com/help/images/ref/normxcorr2.html}.
+\newblock Accessed: 2014-12-10.
+
+\bibitem{belussi}
+Luiz~FF Belussi and Nina~ST Hirata.
+\newblock Fast qr code detection in arbitrarily acquired images.
+\newblock In {\em Graphics, Patterns and Images (Sibgrapi), 2011 24th SIBGRAPI
+  Conference on}, pages 281--288. IEEE, 2011.
+
+\bibitem{bradley}
+Derek Bradley and Gerhard Roth.
+\newblock Adaptive thresholding using the integral image.
+\newblock {\em Journal of graphics, gpu, and game tools}, 12(2):13--21, 2007.
+
+\bibitem{projective}
+Franz Lemmermeyer.
+\newblock Introduction to algebraic geometry ch.7.
+\newblock \url{http://www.fen.bilkent.edu.tr/~franz/ag05/ag-07.pdf}, 2005.
+\newblock Accessed 2014-12-10.
+
+\bibitem{lewisfast}
+JP~Lewis.
+\newblock Fast normalized cross-correlation.
+\newblock In {\em Vision interface}, volume~10, pages 120--123, 1995.
+
+\bibitem{penrose}
+R.~Penrose.
+\newblock On best approximate solutions of linear matrix equations.
+\newblock {\em Mathematical Proceedings of the Cambridge Philosophical
+  Society}, 52:17--19, 1 1956.
+
+\end{thebibliography}

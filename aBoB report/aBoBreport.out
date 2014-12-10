@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Theory}{}% 2
+\BOOKMARK [1][-]{section.3}{Method}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Binarizing the Image}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Localizing the Fiducial Marks}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Rotation}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{Adjustment for Perspective Distortion}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.4.1}{Corner Detection}{subsection.3.4}% 8
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Projective Transformation}{subsection.3.4}% 9
+\BOOKMARK [2][-]{subsection.3.5}{Cropping}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.6}{Decoding the QR-code}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{Result}{}% 12
+\BOOKMARK [1][-]{section.5}{Conclusion and Discussion}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Performance}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.2}{Corner detection}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.3}{Transformations}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.4}{Special cases}{section.5}% 17
