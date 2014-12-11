@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{fitgeotrans}
 Mathworks, documentation of matlab function fitgeotrans.
@@ -30,6 +30,11 @@ Luiz~FF Belussi and Nina~ST Hirata.
 Derek Bradley and Gerhard Roth.
 \newblock Adaptive thresholding using the integral image.
 \newblock {\em Journal of graphics, gpu, and game tools}, 12(2):13--21, 2007.
+
+\bibitem{cameradist}
+Chung-Hua Chu, De-Nian Yang, Ya-Lan Pan, and Ming-Syan Chen.
+\newblock Stabilization and extraction of 2d barcodes for camera phones.
+\newblock {\em Multimedia systems}, 17(2):113--133, 2011.
 
 \bibitem{projective}
 Franz Lemmermeyer.
