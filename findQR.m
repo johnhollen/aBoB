@@ -11,7 +11,7 @@ if imageDim == 3
    greyScale = (greyScale(:,:,1)+greyScale(:,:,2)+greyScale(:,:,3))/3;
 end
 
-%level = graythresh(greyScale);
+%Binarizing the image
 binary = binarize(greyScale);
 
 
@@ -146,7 +146,7 @@ for i = 1:nrLabels
 
    length1 = point1 - point3;
    length2 = point1 - point2;
-   %if abs(dd1-dd2) < treshold && abs(dd1-dd3) < treshold && abs(dd1-dd4) < treshold
+   
    if (abs(norm(length1)-norm(length2))) < 0.1 
       meanX = mean(col);
       meanY = mean(row);
@@ -164,28 +164,24 @@ for i = 1:nrLabels
    righterCoord = [0,0];
    
    %Make sure we get the center of the fiducial mark
-   while binary(tempIndexI, tempIndexJ) == 0 && tempIndexI > 1%Count black pixels again
+   while binary(tempIndexI, tempIndexJ) == 0 && tempIndexI > 1 %Count black pixels again
       tempIndexI = tempIndexI - 1;
-      %blackCounterI = blackCounterI + 1;
       upperCoord(1) = tempIndexJ;
       upperCoord(2) = tempIndexI;
    end
 
    tempIndexI = floor(meanY); %Reset the value
 
-   while binary(tempIndexI, tempIndexJ) == 0 && tempIndexI < size(image, 1)%Count black pixels again
+   while binary(tempIndexI, tempIndexJ) == 0 && tempIndexI < size(image, 1) %Count black pixels again
       tempIndexI = tempIndexI + 1;
-      %blackCounterI = blackCounterI + 1;
       downerCoord(1) = tempIndexJ;
       downerCoord(2) = tempIndexI;
    end
 
    tempIndexI = floor(meanY); %Reset the value
 
-   while binary(tempIndexI, tempIndexJ) == 0 && tempIndexJ > 1%Count black pixels again
+   while binary(tempIndexI, tempIndexJ) == 0 && tempIndexJ > 1 %Count black pixels again
       tempIndexJ = tempIndexJ - 1;
-      %blackCounterJ = blackCounterJ + 1;
-
       lefterCoord(1) = tempIndexJ;
       lefterCoord(2) = tempIndexI;
    end
@@ -194,12 +190,9 @@ for i = 1:nrLabels
 
    while binary(tempIndexI, tempIndexJ) == 0 && tempIndexJ < size(image, 2)%Count black pixels again
       tempIndexJ = tempIndexJ + 1;
-      %blackCounterJ = blackCounterJ + 1;
-
       righterCoord(1) = tempIndexJ;
       righterCoord(2) = tempIndexI;
-   end
-   
+   end   
    
    meanX = lefterCoord(1) + norm(righterCoord-lefterCoord)/2;
    meanY = upperCoord(2) + norm(downerCoord-upperCoord)/2;
@@ -214,10 +207,6 @@ end
 sortedNrPoints = nrPoints(order1, :);
 sortedNrPoints = sortedNrPoints(1:3, 1:3);
 
-Labels = Labels*255;
-
-
-%centreWeight
 
 %Rotate the image to be in line with x-axis
 xAxis = [1,0];
@@ -241,7 +230,6 @@ vectorAngle = acos(dot(vecX,xAxis));
 if vecX(1) < 0
    vectorAngle = vectorAngle - pi; 
 end
-
 
 center = [size(image, 1)/2; size(image, 2)/2];
 
@@ -272,9 +260,6 @@ for i = 1:3
     rotatedCentrePoints(i, 2) = result(2,1);
 end
 
-
 %Fix the perspective in separate file
 croppedQr = fixPerspective(greyRotated, rotatedCentrePoints);
-
-%figure, imshow(croppedQr);
 qrImage = croppedQr;

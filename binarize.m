@@ -8,6 +8,7 @@ height = size(image, 1);
 %Create binary image with adaptive tresholding
 %Extension of Wellner's method
 binaryImage = ones(height, width);
+
 %Calculate integral image, matlab built in method
 integImage = integralImage(image);
 
@@ -18,7 +19,7 @@ t = 15;
 sdiv = floor(s/2);
 
 %Treshold
-%Vectorized version
+%Vectorized version instead of looping
 
 i = 1:1:height;
 j = 1:1:width;

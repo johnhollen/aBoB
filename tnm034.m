@@ -9,6 +9,3 @@ function strout = tnm034(im)
 qrImage = findQR(im);
 
 strout = decodeQR(qrImage);
-
-%string = 'tjena'; 
-%strout=char(string);
