@@ -3,7 +3,7 @@ clc
 fprintf('\nStart main \n========================================================== \n\n');
 
 % close all
-%img = imread('testImages/Images_Training_5/Hus_4b.png');
+img = imread('testImages/Images_Training_2/Hus_1b.png');
 % img2 = imread('testImages/Images_Training_5/DostojevskyMetro_full_0.png');
 %img3 = imread('testImages/Images_Training_5/Husannons_full.png');
 %img4 = imread('testImages/Images_Training_6/Bygg_3_Illum.png');
@@ -12,7 +12,7 @@ fprintf('\nStart main \n========================================================
 % img7 = imread('testImages/Images_Training_6/Husannons_full_Illum.png');
 %img = imread('testImages/Images_Training_3/Hus_2e.png');
 % % 
-%strout1 = tnm034(img)
+strout1 = tnm034(img)
 % strout2 = tnm034(img2)
 %strout3 = tnm034(img3)
 %strout4 = tnm034(img4)
